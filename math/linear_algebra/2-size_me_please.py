@@ -9,7 +9,8 @@ def matrix_shape(matrix):
         matrix (list): Liste imbriquée 1D, 2D ou 3D...
 
     Liste les dimensions de la matrice dans l'ordre suivant:
-        Si 3D : nombre de blocs (Z axis), nombre de lignes (Y axis), nombre de colonnes (X axis)
+        Si 3D : nombre de blocs (Z axis), nombre de lignes (Y axis),
+            nombre de colonnes (X axis)
         Si 2D : nombre de lignes (Y axis), nombre de colonnes (X axis)
 
     Returns:
