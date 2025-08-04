@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""
+Ce module contient la fonction matrix_shape qui calcule les dimensions
+d'une matrice potentiellement 1D, 2D ou 3D représentée par une liste imbriquée.
+"""
 
 def matrix_shape(matrix):
     """matrix_shape
