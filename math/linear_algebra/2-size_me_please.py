@@ -4,14 +4,13 @@ def matrix_shape(matrix):
     """matrix_shape
 
     Calcule les dimensions d'une matrice (liste imbriquée).
-
-    Args:
-        matrix (list): Liste imbriquée 1D, 2D ou 3D...
-
     Liste les dimensions de la matrice dans l'ordre suivant:
         Si 3D : nombre de blocs (Z axis), nombre de lignes (Y axis),
             nombre de colonnes (X axis)
         Si 2D : nombre de lignes (Y axis), nombre de colonnes (X axis)
+
+    Args:
+        matrix (list): Liste imbriquée 1D, 2D ou 3D...
 
     Returns:
         list: taille de la matrice donnée
