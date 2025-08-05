@@ -2,7 +2,6 @@
 """
 Function that transpose a given matrice
 """
-import numpy as np
 
 
 def np_transpose(matrix):
@@ -14,5 +13,5 @@ def np_transpose(matrix):
     Returns:
         np.array: the transposed given matrice
     """
-    new = np.transpose(matrix)
+    new = matrix.T
     return new
