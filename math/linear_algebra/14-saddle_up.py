@@ -16,4 +16,4 @@ def np_matmul(mat1, mat2):
         np.array: New NumPy array resulting from the matrix multiplication
         of mat1 and mat2.
     """
-    return np.matmul(mat1, mat2) # ou mat1 @ mat2
+    return np.matmul(mat1, mat2)  # ou mat1 @ mat2
