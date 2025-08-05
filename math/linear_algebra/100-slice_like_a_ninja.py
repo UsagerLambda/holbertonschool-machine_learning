@@ -2,7 +2,6 @@
 """
 Function that slice a matrix with specified parameter in axes
 """
-import numpy as np
 
 
 def np_slice(matrix, axes={}):
