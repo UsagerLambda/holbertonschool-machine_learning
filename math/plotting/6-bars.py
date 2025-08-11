@@ -35,7 +35,6 @@ def bars():
     plt.title('Number of Fruit per Person')
 
     plt.yticks(range(0, 81, 10))
-    plt.ylim(0, 80)
 
     plt.legend()
     plt.show()
