@@ -37,5 +37,5 @@ def bars():
     plt.yticks(range(0, 81, 10))
     plt.ylim(0, 80)
 
-    plt.legend(loc='upper right')
+    plt.legend()
     plt.show()
