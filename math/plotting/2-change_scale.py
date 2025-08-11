@@ -5,6 +5,7 @@ Display a line graph
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def change_scale():
     """
     plot x ↦ y as line graph with x and y axis and title labeled,
