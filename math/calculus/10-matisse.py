@@ -23,6 +23,6 @@ def poly_derivative(poly):
         result.append(i * poly[i])
 
     if not result:
-        return None
+        return [0]
 
     return result
