@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Module pour calculer la somme des carrés des entiers de 1 à n."""
 
 
