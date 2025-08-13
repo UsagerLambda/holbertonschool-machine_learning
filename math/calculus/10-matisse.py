@@ -18,6 +18,9 @@ def poly_derivative(poly):
     if not all(isinstance(k, int) for k in poly):
         return None
 
+    if len(poly) == 0:
+        return None
+
     result = []
     for i in range(1, len(poly)):
         result.append(i * poly[i])
