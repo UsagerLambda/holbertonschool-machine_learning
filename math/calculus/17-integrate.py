@@ -12,7 +12,7 @@ def poly_integral(poly, C=0):
         Defaults to 0.
 
     Returns:
-        _type_: new list of coefficients representing
+        list: new list of coefficients representing
         the integral of the polynomial
     """
     if not isinstance(poly, list) or len(poly) == 0:
@@ -30,4 +30,8 @@ def poly_integral(poly, C=0):
             integral.append(coeff // diviseur)
         else:
             integral.append(coeff / diviseur)
+
+    while len(integral) > 1 and integral[-1] == 0:
+        integral.pop()  # supprime le dernier élément tant qu'il est égal à 0
+
     return integral
