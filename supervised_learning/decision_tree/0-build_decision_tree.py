@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
+"""Implémentation d'un arbre de décision simple."""
 
 import numpy as np
 
 
 class Node:
+    """Classe représentant un nœud interne d'un arbre de décision."""
+
     def __init__(self, feature=None, threshold=None, left_child=None,
                  right_child=None, is_root=False, depth=0):
+        """Initialise un nœud interne de l'arbre de décision."""
         self.feature = feature
         self.threshold = threshold
         self.left_child = left_child
@@ -16,7 +20,8 @@ class Node:
         self.depth = depth
 
     def max_depth_below(self):
-        """
+        """Retourne la profondeur maximale.
+
         Méthode récursive qui compte la profondeur max d'un arbre
         à partir d'un nœud donné
 
@@ -39,19 +44,31 @@ class Node:
 
 
 class Leaf(Node):
+    """Classe représentant une feuille de l'arbre de décision."""
+
     def __init__(self, value, depth=None):
+        """Initialise une feuille de l'arbre de décision."""
         super().__init__()
         self.value = value
         self.is_leaf = True
         self.depth = depth
 
     def max_depth_below(self):
+        """
+        Retourne la profondeur de la feuille.
+
+        Returns:
+            int: Profondeur de la feuille.
+        """
         return self.depth
 
 
 class Decision_Tree():
+    """Classe principale pour l'arbre de décision."""
+
     def __init__(self, max_depth=10, min_pop=1, seed=0,
                  split_criterion="random", root=None):
+        """Initialise un arbre de décision."""
         self.rng = np.random.default_rng(seed)
         if root:
             self.root = root
@@ -65,4 +82,10 @@ class Decision_Tree():
         self.predict = None
 
     def depth(self):
+        """
+        Retourne la profondeur maximale de l'arbre.
+
+        Returns:
+            int: Profondeur maximale de l'arbre.
+        """
         return self.root.max_depth_below()
