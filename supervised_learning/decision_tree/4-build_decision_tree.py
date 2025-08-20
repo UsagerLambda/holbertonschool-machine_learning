@@ -119,12 +119,12 @@ class Node:
 
             if child == self.left_child:
                 # Enfant gauche : feature <= threshold
-                # MAJ de la borne supérieure
-                child.upper[self.feature] = self.threshold
-            else:
-                # Enfant droit : feature > threshold
                 # MAJ de la borne inférieure
                 child.lower[self.feature] = self.threshold
+            else:
+                # Enfant droit : feature > threshold
+                # MAJ de la borne supérieure
+                child.upper[self.feature] = self.threshold
 
         for child in [self.left_child, self.right_child]:
             if child is not None:
