@@ -80,20 +80,33 @@ class Node:
         return 1 + count
 
     def __str__(self):
-        return
+        """Affiche le nœud et ses enfants sous forme de chaîne."""
+        s = f"-> node [feature={self.feature}, threshold={self.threshold}]"
+        if self.is_root is True:
+            s = f"root [feature={self.feature}, threshold={self.threshold}]"
+
+        if self.left_child is not None:
+            s += "\n" + self.left_child_add_prefix(str(self.left_child))
+
+        if self.right_child is not None:
+            s += self.right_child_add_prefix(str(self.right_child))
+
+        return s
 
     def left_child_add_prefix(self, text):
-        lines=text.split("\n")
-        new_text="    +--"+lines[0]+"\n"
-        for x in lines[1:] :
-            new_text+=("    |  "+x)+"\n"
+        """Ajoute un préfixe pour afficher le sous-arbre gauche."""
+        lines = text.split("\n")
+        new_text = "    +--" + lines[0] + "\n"
+        for x in lines[1:-1]:
+            new_text += ("    |  " + x) + "\n"
         return (new_text)
 
     def right_child_add_prefix(self, text):
-        lines=text.split("\n")
-        new_text="    +--"+lines[0]+"\n"
-        for x in lines[1:] :
-            new_text+=("    |  "+x)+"\n"
+        """Ajoute un préfixe pour afficher le sous-arbre droit."""
+        lines = text.split("\n")
+        new_text = "    +--" + lines[0] + "\n"
+        for x in lines[1:-1]:
+            new_text += ("       "+x) + "\n"
         return (new_text)
 
 
@@ -121,6 +134,7 @@ class Leaf(Node):
         return 1
 
     def __str__(self):
+        """Affiche la feuille sous forme de chaîne."""
         return (f"-> leaf [value={self.value}]")
 
 
@@ -156,4 +170,5 @@ class Decision_Tree():
         return self.root.count_nodes_below(only_leaves=only_leaves)
 
     def __str__(self):
+        """Affiche l'abre sous forme de chaîne."""
         return self.root.__str__()
