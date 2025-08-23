@@ -459,7 +459,7 @@ class Decision_Tree():
             self.explanatory[:, node.feature] <= node.threshold)
 
         # Is left node a leaf ?
-        is_left_leaf = ((node.depth == self.max_depth) or (
+        is_left_leaf = ((node.depth >= self.max_depth - 1) or (
             left_population.sum() < self.min_pop) or (
                 np.unique(self.target[left_population]).size == 1))
 
@@ -470,7 +470,7 @@ class Decision_Tree():
             self.fit_node(node.left_child)
 
         # Is right node a leaf ?
-        is_right_leaf = ((node.depth == self.max_depth) or (
+        is_right_leaf = ((node.depth >= self.max_depth - 1) or (
             right_population.sum() < self.min_pop) or (
                 np.unique(self.target[right_population]).size == 1))
 
