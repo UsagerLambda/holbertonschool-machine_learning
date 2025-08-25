@@ -1,8 +1,23 @@
 #!/usr/bin/env python3
+"""Module qui définit la classe Neuron pour un réseau de neurones simple."""
+
 import numpy as np
 
+
 class Neuron:
+    """Classe d'un neurone pour un réseau à une couche."""
+
     def __init__(self, nx):
+        """
+        Initialise un neurone.
+
+        Paramètres :
+            nx (int) : Nombre de caractéristiques d'entrée du neurone.
+
+        Lève :
+            TypeError : Si nx n'est pas un entier.
+            ValueError : Si nx est inférieur à 1.
+        """
         if not isinstance(nx, int):
             raise TypeError("nx must be an integer")
         if nx < 1:
