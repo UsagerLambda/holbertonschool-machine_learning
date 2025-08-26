@@ -9,7 +9,7 @@ class NeuralNetwork:
 
     def __init__(self, nx, nodes):
         """
-        Neural network with one hidden layer for binary classification.
+        Neural network with one hidden layer, binary classification.
 
         Args:
             nx (int): number of input features
@@ -32,14 +32,14 @@ class NeuralNetwork:
         if nodes < 1:
             raise ValueError("nodes must be a positive integer")
 
-        # --- Public instance attributes for hidden layer ---
+        # --- Public instance attributes pour couches cachées ---
         self.W1 = np.random.randn(nodes, nx)
         # Vecteur de biais de la couche cachée,
         # ayant une dimension pour chaque neurone de celle-ci (initialisé à 0)
         self.b1 = np.zeros((nodes, 1))
         self.A1 = 0
 
-        # --- Public instance attributes for output neuron ---
+        # --- Public instance attributes pour neurons de sortie ---
         self.W2 = np.random.randn(1, nodes)
         self.b2 = 0
         self.A2 = 0
