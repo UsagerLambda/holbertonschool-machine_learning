@@ -105,6 +105,16 @@ class Neuron:
         return predictions, J
 
     def gradient_descent(self, X, Y, A, alpha=0.05):
+        """Effectue une itération de descente de gradient.
+
+        Args:
+            X (np.ndarray): Doonées d'entrée de forme (nx, m)
+            Y (np.ndarray): Lables corrects de forme (1, m)
+            A (np.ndarray): Sorties activées de forme (1, m)
+            alpha (float, optional): Taux d'appentissage. Defaults to 0.05.
+
+        Met à jour les poids __W et le biais __b.
+        """
         # Nombre d'exemples dans notre dataset (combien de lignes on traite)
         m = Y.shape[1]
         # Pour chaque exemple : erreur = ce qu'on a prédit - ce qu'on voulait
@@ -116,7 +126,7 @@ class Neuron:
         # Quand cette feature est forte, est-ce que je me trompe souvent ?
         # Le (1/m) fait la moyenne sur tous les exemples
         # Résult : un nombre pour chaque poids qui dit: ajuste-moi dans ce sens
-        dw = (1/m) * np.dot(X, dz.T)
+        dw = (1/m) * np.dot(dz, X.T)
 
         # Bias : Est-ce que je suis globalement trop optimiste ou pessimiste ?
         # Je fais la moyenne de toutes mes erreurs
