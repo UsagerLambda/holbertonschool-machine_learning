@@ -129,7 +129,7 @@ class NeuralNetwork:
     def evaluate(self, X, Y):
         """Évalue le neurone et retourne les prédictions et le coût.
 
-        Le neurone calcule d'abord la sortie activée A2 via forward propagation,
+        Le neurone calcule d'abord la sortie activée A2 via forward_prop,
         puis :
             - Calcule le coût moyen (loss) en comparant A2 à Y.
             - Convertit A2 en prédictions binaires (1 si ≥ 0.5, sinon 0).
@@ -154,3 +154,74 @@ class NeuralNetwork:
         predictions = np.where(A2 >= 0.5, 1, 0)
 
         return predictions, J
+
+    def gradient_descent(self, X, Y, A1, A2, alpha=0.05):
+        """
+        Itération de descente de gradient pour ajuster les poids et biais.
+
+        Cette fonction met à jour :
+            - les poids et biais de la couche de sortie (W2, b2)
+            - les poids et biais de la couche cachée (W1, b1).
+
+        Args:
+        X (np.ndarray): données d'entrée de forme (nx, m),
+            nx = nombre de features, m = nombre d'exemples.
+        Y (np.ndarray): étiquettes réelles de forme (1, m).
+        A1 (np.ndarray): activations de la couche cachée de forme (nodes, m).
+        A2 (np.ndarray): activations de la couche de sortie de forme (1, m).
+        alpha (float, optional): taux d'apprentissage. Contrôle la taille
+            des corrections de poids. Defaults to 0.05.
+        """
+        # Nombre d'exemples dans notre dataset (combien de lignes on traite)
+        m = Y.shape[1]
+
+        # ---- Gradient descent du neuron de sortie ----
+        # Ècart entre l'activation du neurone de sortie et l'étiquette
+        dz2 = A2 - Y
+
+        # dw2 stocke le gradient moyen de chaque poids de la couche de sortie
+        # par rapport à l'erreur de sortie des cette couche (Écart)
+        # pour tous les exemples
+        dw2 = (1/m) * np.dot(dz2, A1.T)
+
+        # db2 = gradient des biais de la couche de sortie
+        # Correspond à la moyenne des erreurs dz2
+        db2 = (1/m) * np.sum(dz2, axis=1, keepdims=True)
+
+        # Corrige les poids : si dw2 dit "trop fort", je diminue (d'où le -)
+        # alpha contrôle si : petite correction (0.01) ou grosse (0.5)
+        self.__W2 = self.__W2 - alpha * dw2
+
+        # Correction du biais selon db2
+        # On ajuste le biais du neurone en fonction de la moyenne
+        # des erreurs (db2). Cela permet au neurone de s'adapter
+        # globalement à la tendance des prédictions.
+        self.__b2 = self.__b2 - alpha * db2
+
+        # ---- Gradient descent + Back propagation de l'hidden output ----
+
+        # "np.dot(self.__W2.T, dz2)"
+        # transmet l’erreur de sortie à la couche cachée selon les poids
+
+        # "* (A1 * (1 - A1))"
+        # ajuste l'erreur par rapport à la sensibilité du neurone caché
+        dz1 = np.dot(self.__W2.T, dz2) * (A1 * (1 - A1))
+
+        # dw1 stocke le gradient moyen de chaque poids de la couche cachée
+        # par rapport à l'erreur de sortie de cette couche (dz1)
+        # pour tous les exemples.
+        dw1 = (1/m) * np.dot(dz1, X.T)
+
+        # db1 = gradient des biais de la couche cachée
+        # Correspond à la moyenne des erreurs dz1
+        db1 = (1/m) * np.sum(dz1, axis=1, keepdims=True)
+
+        # Corrige les poids : si dw1 dit "trop fort", je diminue (d'où le -)
+        # alpha contrôle si : petite correction (0.01) ou grosse (0.5)
+        self.__W1 = self.__W1 - alpha * dw1
+
+        # Correction du biais selon db1
+        # On ajuste le biais du neurone en fonction de la moyenne
+        # des erreurs (db1). Cela permet au neurone de s'adapter
+        # globalement à la tendance des prédictions.
+        self.__b1 = self.__b1 - alpha * db1
