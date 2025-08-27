@@ -182,11 +182,11 @@ class NeuralNetwork:
         # dw2 stocke le gradient moyen de chaque poids de la couche de sortie
         # par rapport à l'erreur de sortie des cette couche (Écart)
         # pour tous les exemples
-        dw2 = (1/m) * np.dot(dz2, A1.T)
+        dw2 = np.dot(dz2, A1.T) / m
 
         # db2 = gradient des biais de la couche de sortie
         # Correspond à la moyenne des erreurs dz2
-        db2 = (1/m) * np.sum(dz2, axis=1, keepdims=True)
+        db2 = np.sum(dz2, axis=1, keepdims=True) / m
 
         # Corrige les poids : si dw2 dit "trop fort", je diminue (d'où le -)
         # alpha contrôle si : petite correction (0.01) ou grosse (0.5)
@@ -210,11 +210,11 @@ class NeuralNetwork:
         # dw1 stocke le gradient moyen de chaque poids de la couche cachée
         # par rapport à l'erreur de sortie de cette couche (dz1)
         # pour tous les exemples.
-        dw1 = (1/m) * np.dot(dz1, X.T)
+        dw1 = np.dot(dz1, X.T) / m
 
         # db1 = gradient des biais de la couche cachée
         # Correspond à la moyenne des erreurs dz1
-        db1 = (1/m) * np.sum(dz1, axis=1, keepdims=True)
+        db1 = np.sum(dz1, axis=1, keepdims=True) / m
 
         # Corrige les poids : si dw1 dit "trop fort", je diminue (d'où le -)
         # alpha contrôle si : petite correction (0.01) ou grosse (0.5)
