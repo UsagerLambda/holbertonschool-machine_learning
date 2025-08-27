@@ -129,7 +129,7 @@ class NeuralNetwork:
     def evaluate(self, X, Y):
         """Évalue le neurone et retourne les prédictions et le coût.
 
-        Le neurone calcule d'abord la sortie activée A2 via forward_prop,
+        Le neurone calcule d'abord la sortie activée A2 via forward propagation,
         puis :
             - Calcule le coût moyen (loss) en comparant A2 à Y.
             - Convertit A2 en prédictions binaires (1 si ≥ 0.5, sinon 0).
