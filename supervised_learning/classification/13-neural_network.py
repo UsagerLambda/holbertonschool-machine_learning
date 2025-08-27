@@ -182,7 +182,7 @@ class NeuralNetwork:
         # dw2 stocke le gradient moyen de chaque poids de la couche de sortie
         # par rapport à l'erreur de sortie des cette couche (Écart)
         # pour tous les exemples
-        dw2 = np.dot(dz2, A1.T) / m
+        dw2 = np.matmul(dz2, A1.T) / m
 
         # db2 = gradient des biais de la couche de sortie
         # Correspond à la moyenne des erreurs dz2
@@ -205,12 +205,12 @@ class NeuralNetwork:
 
         # "* (A1 * (1 - A1))"
         # ajuste l'erreur par rapport à la sensibilité du neurone caché
-        dz1 = np.dot(self.__W2.T, dz2) * (A1 * (1 - A1))
+        dz1 = np.matmul(self.__W2.T, dz2) * (A1 * (1 - A1))
 
         # dw1 stocke le gradient moyen de chaque poids de la couche cachée
         # par rapport à l'erreur de sortie de cette couche (dz1)
         # pour tous les exemples.
-        dw1 = np.dot(dz1, X.T) / m
+        dw1 = np.matmul(dz1, X.T) / m
 
         # db1 = gradient des biais de la couche cachée
         # Correspond à la moyenne des erreurs dz1
