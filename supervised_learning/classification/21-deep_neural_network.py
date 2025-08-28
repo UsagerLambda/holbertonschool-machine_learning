@@ -162,25 +162,19 @@ class DeepNeuralNetwork:
         """
         m = Y.shape[1]
         W = self.__weights
-        y = 0
-        save = []
+        save = None
+
         for i in range(self.__L, 0, -1):
             if i == self.__L:
                 DZ = cache[f"A{self.__L}"] - Y
-                DW = np.dot(DZ, cache[f"A{self.__L - 1}"].T) / m
-                DB = np.sum(DZ, axis=1, keepdims=True) / m
-                save.append({"DZ": DZ, "DW": DW, "DB": DB})
-
-                W[f"W{i}"] = W[f"W{i}"] - alpha * DW
-                W[f"b{i}"] = W[f"b{i}"] - alpha * DB
             else:
-                DZ = np.dot(W[f"W{i+1}"].T, save[y]["DZ"]) * (
+                DZ = np.dot(W[f"W{i+1}"].T, save) * (
                     cache[f"A{i}"] * (1 - cache[f"A{i}"]))
-                DW = np.dot(DZ, cache[f"A{i-1}"].T) / m
-                DB = np.sum(DZ, axis=1, keepdims=True) / m
-                save.append({"DZ": DZ, "DW": DW, "DB": DB})
 
-                W[f"W{i}"] = W[f"W{i}"] - alpha * DW
-                W[f"b{i}"] = W[f"b{i}"] - alpha * DB
+            DW = np.dot(DZ, cache[f"A{i-1}"].T) / m
+            DB = np.sum(DZ, axis=1, keepdims=True) / m
 
-                y += 1
+            W[f"W{i}"] = W[f"W{i}"] - alpha * DW
+            W[f"b{i}"] = W[f"b{i}"] - alpha * DB
+
+            save = DZ
