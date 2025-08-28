@@ -26,8 +26,7 @@ class DeepNeuralNetwork:
         if nx < 1:
             raise ValueError("nx must be a positive integer")
 
-        if (not isinstance(layers, list) or not layers or
-                not all(isinstance(x, int) and x > 0 for x in layers)):
+        if not isinstance(layers, list) or not layers:
             raise TypeError("layers must be a list of positive integers")
 
         # --- Public instance attributes ---
@@ -35,7 +34,6 @@ class DeepNeuralNetwork:
         # Chaque entier de la liste est le nombre de neurones par couche,
         # la longueur de la liste est le nombre de couches
         self.L = len(layers)
-        print(layers, nx)
 
         # Dictionnaire qui stocke les valeurs du calcul linéaire
         # et de l'activation de chaque couches
@@ -43,6 +41,9 @@ class DeepNeuralNetwork:
 
         self.weights = {}
         for index in range(len(layers)):
+            if not isinstance(layers[index], int) or layers[index] <= 0:
+                raise TypeError("layers must be a list of positive integers")
+
             # Si c'est la première couche
             if index == 0:
                 # Utilisation de la méthode He et al.
