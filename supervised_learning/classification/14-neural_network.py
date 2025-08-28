@@ -188,16 +188,6 @@ class NeuralNetwork:
         # Correspond à la moyenne des erreurs dz2
         db2 = np.sum(dz2, axis=1, keepdims=True) / m
 
-        # Corrige les poids : si dw2 dit "trop fort", je diminue (d'où le -)
-        # alpha contrôle si : petite correction (0.01) ou grosse (0.5)
-        self.__W2 = self.__W2 - alpha * dw2
-
-        # Correction du biais selon db2
-        # On ajuste le biais du neurone en fonction de la moyenne
-        # des erreurs (db2). Cela permet au neurone de s'adapter
-        # globalement à la tendance des prédictions.
-        self.__b2 = self.__b2 - alpha * db2
-
         # ---- Gradient descent + Back propagation de l'hidden output ----
 
         # "np.dot(self.__W2.T, dz2)"
@@ -215,6 +205,18 @@ class NeuralNetwork:
         # db1 = gradient des biais de la couche cachée
         # Correspond à la moyenne des erreurs dz1
         db1 = np.sum(dz1, axis=1, keepdims=True) / m
+
+        # --- mise à jour des variables ---
+
+        # Corrige les poids : si dw2 dit "trop fort", je diminue (d'où le -)
+        # alpha contrôle si : petite correction (0.01) ou grosse (0.5)
+        self.__W2 = self.__W2 - alpha * dw2
+
+        # Correction du biais selon db2
+        # On ajuste le biais du neurone en fonction de la moyenne
+        # des erreurs (db2). Cela permet au neurone de s'adapter
+        # globalement à la tendance des prédictions.
+        self.__b2 = self.__b2 - alpha * db2
 
         # Corrige les poids : si dw1 dit "trop fort", je diminue (d'où le -)
         # alpha contrôle si : petite correction (0.01) ou grosse (0.5)
