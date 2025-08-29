@@ -251,30 +251,26 @@ class DeepNeuralNetwork:
 
     def save(self, filename):
         """
-        Sauvegarde l'instance du réseau de neurones dans un fichier
+        Save the instance object into a file in pickle format.
 
         Args:
-            filename (str): nom du fichier de sauvegarde
-
-        Notes:
-            Si filename n'a pas l'extension .pkl, elle est ajoutée
+            filename (str): filename
         """
         if not filename.endswith('.pkl'):
             filename += '.pkl'
-
         with open(filename, 'wb') as f:
             pickle.dump(self, f)
 
     @staticmethod
     def load(filename):
         """
-        Charge une instance de DeepNeuralNetwork depuis un fichier
+        Load object from a pickle file.
 
         Args:
-            filename (str): nom du fichier à charger
+            filename (str): name of the file to load
 
         Returns:
-            DeepNeuralNetwork: l'instance chargée, None si erreur
+            object: loaded object or None if filename doesn't exist.
         """
         try:
             with open(filename, 'rb') as f:
