@@ -22,7 +22,7 @@ def one_hot_encode(Y, classes):
         # pour chaque valeur de Y,
         # place un 1 à l’index correspondant dans une ligne de taille classes,
         # le reste à 0.
-        one_hot = np.eye(classes)[Y]
+        one_hot = np.eye(classes)[Y].T
     except Exception:
         return None
     return one_hot
