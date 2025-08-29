@@ -235,7 +235,8 @@ class DeepNeuralNetwork:
             if verbose and (i % step == 0 or i == 0 or i == iterations):
                 print(f"Cost after {i} iterations: {cost}")
 
-            self.gradient_descent(Y, cache, alpha)
+            if i < iterations:
+                self.gradient_descent(Y, cache, alpha)
 
         # --- Si graph = True, affiche le graph
         if graph:
