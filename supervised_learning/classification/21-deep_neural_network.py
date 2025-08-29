@@ -161,19 +161,17 @@ class DeepNeuralNetwork:
                 Defaults to 0.05.
         """
         m = Y.shape[1]
-        save = None
+        DZ = cache[f"A{self.__L}"] - Y
 
         for i in range(self.__L, 0, -1):
-            if i == self.__L:
-                DZ = cache[f"A{i}"] - Y
-            else:
-                DZ = np.dot(self.__weights[f"W{i+1}"].T, save) * (
-                    cache[f"A{i}"] * (1 - cache[f"A{i}"]))
+            A_prev = cache[f"A{i-1}"]
 
-            DW = np.dot(DZ, cache[f"A{i-1}"].T) / m
+            DW = np.dot(DZ, A_prev.T) / m
             DB = np.sum(DZ, axis=1, keepdims=True) / m
+
+            if i > 1:
+                DZ = np.dot(self.__weights[f"W{i}"].T, DZ) * (
+                    A_prev * (1 - A_prev))
 
             self.__weights[f"W{i}"] = self.__weights[f"W{i}"] - alpha * DW
             self.__weights[f"b{i}"] = self.__weights[f"b{i}"] - alpha * DB
-
-            save = DZ
