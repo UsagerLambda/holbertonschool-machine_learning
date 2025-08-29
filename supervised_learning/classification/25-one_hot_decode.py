@@ -15,5 +15,7 @@ def one_hot_decode(one_hot):
     """
     if not isinstance(one_hot, np.ndarray):
         return None
+    if not np.all(np.sum(one_hot, axis=0) == 1):
+        return None
 
     return np.argmax(one_hot, axis=0)
