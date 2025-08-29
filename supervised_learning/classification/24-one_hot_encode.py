@@ -17,6 +17,8 @@ def one_hot_encode(Y, classes):
         np.ndarray ou None: Matrice one-hot de forme (m, classes),
             ou None si une erreur survient.
     """
+    if not isinstance(Y, np.ndarray):
+        return None
     try:
         # Crée une matrice one-hot :
         # pour chaque valeur de Y,
