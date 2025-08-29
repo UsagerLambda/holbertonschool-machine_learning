@@ -178,7 +178,8 @@ class DeepNeuralNetwork:
             self.__weights[f"W{i}"] = self.__weights[f"W{i}"] - alpha * DW
             self.__weights[f"b{i}"] = self.__weights[f"b{i}"] - alpha * DB
 
-    def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True, graph=True, step=100):
+    def train(self, X, Y, iterations=5000, alpha=0.05,
+              verbose=True, graph=True, step=100):
         """Entraîne le réseau de neurones profond.
 
         Args:
@@ -250,26 +251,30 @@ class DeepNeuralNetwork:
 
     def save(self, filename):
         """
-        Save the instance object into a file in pickle format.
+        Sauvegarde l'instance du réseau de neurones dans un fichier
 
         Args:
-            filename (str): filename
+            filename (str): nom du fichier de sauvegarde
+
+        Notes:
+            Si filename n'a pas l'extension .pkl, elle est ajoutée
         """
         if not filename.endswith('.pkl'):
             filename += '.pkl'
+
         with open(filename, 'wb') as f:
             pickle.dump(self, f)
 
     @staticmethod
     def load(filename):
         """
-        Load object from a pickle file.
+        Charge une instance de DeepNeuralNetwork depuis un fichier
 
         Args:
-            filename (str): name of the file to load
+            filename (str): nom du fichier à charger
 
         Returns:
-            object: loaded object or None if filename doesn't exist.
+            DeepNeuralNetwork: l'instance chargée, None si erreur
         """
         try:
             with open(filename, 'rb') as f:
