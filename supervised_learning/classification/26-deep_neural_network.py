@@ -96,7 +96,7 @@ class DeepNeuralNetwork:
         self.__cache["A0"] = X
 
         for i in range(self.__L):
-            Z = np.dot(self.__weights[f"W{i+1}"], self.__cache[
+            Z = np.matmul(self.__weights[f"W{i+1}"], self.__cache[
                 f"A{i}"]) + self.__weights[f"b{i+1}"]
             self.__cache[f"A{i+1}"] = (1 / (1 + np.exp(-Z)))
 
@@ -168,11 +168,11 @@ class DeepNeuralNetwork:
         for i in range(self.__L, 0, -1):
             A_prev = cache[f"A{i-1}"]
 
-            DW = np.dot(DZ, A_prev.T) / m
+            DW = np.matmul(DZ, A_prev.T) / m
             DB = np.sum(DZ, axis=1, keepdims=True) / m
 
             if i > 1:
-                DZ = np.dot(self.__weights[f"W{i}"].T, DZ) * (
+                DZ = np.matmul(self.__weights[f"W{i}"].T, DZ) * (
                     A_prev * (1 - A_prev))
 
             self.__weights[f"W{i}"] = self.__weights[f"W{i}"] - alpha * DW
