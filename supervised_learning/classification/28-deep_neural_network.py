@@ -134,7 +134,7 @@ class DeepNeuralNetwork:
             float: Le coût moyen (loss) du modèle sur les m exemples.
         """
         m = Y.shape[1]  # nombre d'éléments dans les colonnes du tableau numpy
-        J = -(1/m * np.sum(Y * np.log(A + 1e-8)))
+        J = -(1/m * np.sum(Y * np.log(A + 0)))
         return J
 
     def evaluate(self, X, Y):
