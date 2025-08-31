@@ -19,7 +19,7 @@ def build_model(nx, layers, activations, lambtha, keep_prob):
     # Entrée du réseau avec nx features en entrée
     inputs = K.Input(shape=(nx,))
     layer = inputs
-    for i in range(len(layers)):  # Boucle dans les couches cachées
+    for i in range(len(layers-1)):  # Boucle dans les couches cachées
         layer = K.layers.Dense(  # Créer la couche de neurones
             layers[i],  # Nombre de neurones
             activations[i],  # Fonction d'activation
