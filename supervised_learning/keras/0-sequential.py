@@ -26,7 +26,7 @@ def build_model(nx, layers, activations, lambtha, keep_prob):
                 # Régularisation L2 sur les poids de la couche
                 kernel_regularizer=K.regularizers.l2(lambtha),
                 input_shape=(nx,),  # Forme d'entré
-                name=f"layer{i}"  # Nom de la couche
+                name=f"dense"  # Nom de la couche
             ))
         else:  # Couches suivantes
             model.add(K.layers.Dense(
@@ -34,7 +34,7 @@ def build_model(nx, layers, activations, lambtha, keep_prob):
                 activation=activations[i],  # Type d'activation
                 # Régularisation L2 sur les poids de la couche
                 kernel_regularizer=K.regularizers.l2(lambtha),
-                name=f"layer{i}"  # Nom de la couche
+                name=f"dense_{i}"  # Nom de la couche
             ))
         if i != len(layers) - 1:  # Si pas la dernière couche
             # Désactive aléatoirement une fraction des neurones de la couche
