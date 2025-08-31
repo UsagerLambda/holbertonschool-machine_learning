@@ -2,7 +2,6 @@
 """Initialize Keras model using a Adam optimization."""
 
 import tensorflow.keras as K
-import numpy as np
 
 
 def one_hot(labels, classes=None):
@@ -18,8 +17,8 @@ def one_hot(labels, classes=None):
             Si None, sera déduit automatiquement comme max(labels) + 1.
 
     Returns:
-        np.ndarray:
-            Tableau NumPy de forme (n_samples, classes) contenant
+        tf.Tensor:
+            Tenseur TensorFlow de forme (n_samples, classes) contenant
             l'encodage one-hot des labels.
     """
     if classes is None:
@@ -30,5 +29,4 @@ def one_hot(labels, classes=None):
     layer = K.layers.CategoryEncoding(num_tokens=classes,
                                       output_mode="one_hot")
     # Utilise l'objet avec les données (labels),
-    # et convertie la sortie en tableau numpy
-    return layer(labels).numpy()
+    return layer(labels)
