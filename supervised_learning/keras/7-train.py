@@ -35,15 +35,19 @@ def train_model(network, data, labels, batch_size, epochs,
 
         patience (int): patience used for early stopping
 
-        learning_rate_decay (bool, optionnel): Indique si le taux d’apprentissage doit décroître
-            au fil des époques. Si True, le taux d’apprentissage est mis à jour à chaque époque
+        learning_rate_decay (bool, optionnel): Indique si le taux
+            d’apprentissage doit décroître au fil des époques. Si True,
+            le taux d’apprentissage est mis à jour à chaque époque
             selon la formule : lr = alpha / (1 + decay_rate * epoch).
-            Cela permet de commencer avec un taux d’apprentissage élevé puis de le réduire
-            progressivement, ce qui aide à stabiliser la convergence du modèle.
+            Cela permet de commencer avec un taux d’apprentissage élevé
+            puis de le réduire progressivement, ce qui aide à stabiliser
+            la convergence du modèle.
 
-        alpha (float, optionnel): Taux d’apprentissage initial utilisé si learning_rate_decay est True.
+        alpha (float, optionnel): Taux d’apprentissage initial utilisé
+            si learning_rate_decay est True.
 
-        decay_rate (float, optionnel): Facteur de décroissance du taux d’apprentissage.
+        decay_rate (float, optionnel): Facteur de décroissance
+            du taux d’apprentissage.
 
         verbose (bool, optional): Indique si la progression de l’entraînement
             doit être affichée. Par défaut True.
