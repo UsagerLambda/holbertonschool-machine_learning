@@ -35,7 +35,7 @@ def train_model(network, data, labels, batch_size, epochs,
     Returns:
         keras.history: object generated after training the model.
     """
-    callback =[]
+    callback = []
     if validation_data:
         if early_stopping:
             callback.append(K.callbacks.EarlyStopping(
