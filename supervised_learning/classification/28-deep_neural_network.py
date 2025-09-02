@@ -9,13 +9,15 @@ import pickle
 class DeepNeuralNetwork:
     """Defines a deep neural network performing binary classification."""
 
-    def __init__(self, nx, layers):
+    def __init__(self, nx, layers, activation='sig'):
         """Define a deep neural network performing binary classification.
 
         Args:
             nx (int): number of input features
             layers (list): list representing the number if nodes
-            in each layer of the network
+                in each layer of the network
+            activation (str): define what activation method to use
+                in the forward function.
 
         Raises:
             TypeError: if nx is not an integer
@@ -31,6 +33,9 @@ class DeepNeuralNetwork:
         if not isinstance(layers, list) or not layers:
             raise TypeError("layers must be a list of positive integers")
 
+        if activation not in ['sig', 'tanh']:
+            raise ValueError("activation must be 'sig' or 'tanh'")
+
         # --- Private instance attributes ---
 
         # Chaque entier de la liste est le nombre de neurones par couche,
@@ -40,6 +45,8 @@ class DeepNeuralNetwork:
         # Dictionnaire qui stocke les valeurs du calcul linéaire
         # et de l'activation de chaque couches
         self.__cache = {}
+
+        self.__activation = activation
 
         self.__weights = {}
         for index in range(len(layers)):
@@ -78,8 +85,16 @@ class DeepNeuralNetwork:
         """Retourne la valeur de self.__weights."""
         return self.__weights
 
+    @property
+    def activation(self):
+        """Retourne la valeur self.__activation."""
+        return self.__activation
+
     def forward_prop(self, X):
         """Calculate the forward propagation of the neural network.
+
+            Using the sigmoid function or tanh function based on
+            self.__activation.
 
         The method computes activations layer by layer:
             - For hidden layers (1 to L-1), the sigmoid activation is applied.
@@ -117,7 +132,10 @@ class DeepNeuralNetwork:
 
         # --- sigmoid ---
             if i < self.__L - 1:
-                self.__cache[f"A{i+1}"] = (1 / (1 + np.exp(-Z)))
+                if self.__activation == 'sig':
+                    self.__cache[f"A{i+1}"] = (1 / (1 + np.exp(-Z)))
+                if self.__activation == 'tanh':
+                    self.__cache[f"A{i+1}"] = np.tanh(Z)
 
         return self.__cache[f"A{i+1}"], self.__cache
 
