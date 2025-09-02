@@ -152,7 +152,7 @@ class DeepNeuralNetwork:
             float: Le coût moyen (loss) du modèle sur les m exemples.
         """
         m = Y.shape[1]  # nombre d'éléments dans les colonnes du tableau numpy
-        J = -(1/m * np.sum(Y * np.log(A + 0)))
+        J = -(1/m * np.sum(Y * np.log(A + 1e-8)))
         return J
 
     def evaluate(self, X, Y):
@@ -214,8 +214,12 @@ class DeepNeuralNetwork:
             DB = np.sum(DZ, axis=1, keepdims=True) / m
 
             if i > 1:
-                DZ = np.matmul(self.__weights[f"W{i}"].T, DZ) * (
-                    A_prev * (1 - A_prev))
+                if self.__activation == 'sig':
+                    derivative = A_prev * (1 - A_prev)
+                if self.__activation == 'tanh':
+                    derivative = 1 - A_prev ** 2
+
+                DZ = np.matmul(self.__weights[f"W{i}"].T, DZ) * derivative
 
             self.__weights[f"W{i}"] = self.__weights[f"W{i}"] - alpha * DW
             self.__weights[f"b{i}"] = self.__weights[f"b{i}"] - alpha * DB
