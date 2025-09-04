@@ -6,7 +6,7 @@ Decision_Tree = __import__('8-build_decision_tree').Decision_Tree
 
 
 class Random_Forest():
-    """A."""
+    """Random Forest."""
 
     def __init__(self, n_trees=100, max_depth=10, min_pop=1, seed=0):
         """Calculate."""
