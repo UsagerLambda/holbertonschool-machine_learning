@@ -510,26 +510,37 @@ class Decision_Tree():
             test_explanatory), test_target)) / test_target.size
 
     def possible_thresholds(self, node, feature):
+        """
+        Calculate les seuils possibles pour une feature donnée dans un nœud.
+
+        Les seuils sont les milieux entre chaque paire de valeurs uniques
+        de la feature considérée, pour la sous-population du nœud.
+
+        Args:
+            node (Node): Le nœud courant.
+            feature (int): L'indice de la feature considérée.
+
+        Returns:
+            np.ndarray: Tableau des seuils possibles.
+        """
         values = np.unique((self.explanatory[:, feature])[node.sub_population])
         return (values[1:] + values[: -1]) / 2
 
     def Gini_split_criterion_one_feature(self, node, feature):
-        # Compute a numpy array of booleans Left_F of shape (n,t,c) where
-        #    -> n is the number of individuals in the sub_population corresponding to node
-        #    -> t is the number of possible thresholds
-        #    -> c is the number of classes represented in node
-        # such that Left_F[ i , j , k] is true if
-        #    -> the i-th individual in node is of class k
-        #    -> the value of the chosen feature on the i-th individual
-        #                              is greater than the t-th possible threshold
-        # then by squaring and summing along 2 of the axes of Left_F[ i , j , k],
-        #                     you can get the Gini impurities of the putative left childs
-        #                    as a 1D numpy array of size t
-        #
-        # Then do the same with the right child
-        # Then compute the average sum of these Gini impurities
-        #
-        # Then  return the threshold and the Gini average  for which the Gini average is the smallest
+        """
+        Calculate le meilleur seuil pour une feature selon l’indice de Gini.
+
+        Pour chaque seuil possible, calcule l’impureté de Gini pour les
+        sous-populations gauche et droite, puis retourne le seuil qui minimise
+        la moyenne pondérée des impuretés.
+
+        Args:
+            node (Node): Le nœud courant.
+            feature (int): L'indice de la feature considérée.
+
+        Returns:
+            tuple: (seuil optimal, valeur minimale de Gini)
+        """
         n = node.sub_population.sum()  # nb d'individus
 
         threshold = self.possible_thresholds(node, feature)
@@ -540,16 +551,18 @@ class Decision_Tree():
         classes = np.unique(self.target[node.sub_population])
         c = classes.size
 
-        class_matrix = (self.target[node.sub_population][:, None] == classes[None, :])
+        class_matrix = (self.target[node.sub_population][
+            :, None] == classes[None, :])
 
         threshold_matrix = feature_value[:, None] > threshold[None, :]
 
-        Left_F = threshold_matrix[:, :, None] & class_matrix[: , None, :]
+        Left_F = threshold_matrix[:, :, None] & class_matrix[:, None, :]
 
         left_count = Left_F.sum(axis=0)
         left_totals = left_count.sum(axis=1, keepdims=True)
 
-        left_proportions = np.where(left_totals > 0, left_count / left_totals, 0)
+        left_proportions = np.where(
+            left_totals > 0, left_count / left_totals, 0)
         left_gini = 1 - np.sum(left_proportions ** 2, axis=1)
 
         Right_F = (~threshold_matrix[:, :, None]) & class_matrix[:, None, :]
@@ -557,7 +570,8 @@ class Decision_Tree():
         right_count = Right_F.sum(axis=0)
         right_totals = right_count.sum(axis=1, keepdims=True)
 
-        right_proportions = np.where(right_totals > 0, right_count / right_totals, 0)
+        right_proportions = np.where(
+            right_totals > 0, right_count / right_totals, 0)
         right_gini = 1 - np.sum(right_proportions ** 2, axis=1)
 
         left_weights = left_totals[:, 0] / n
@@ -569,6 +583,18 @@ class Decision_Tree():
         return threshold[min_idx], gini_average[min_idx]
 
     def Gini_split_criterion(self, node):
+        """
+        Détermine la meilleure feature et le meilleur seuil selon Gini.
+
+        Teste toutes les features et sélectionne celle qui donne la plus
+        faible impureté de Gini après le split.
+
+        Args:
+            node (Node): Le nœud courant.
+
+        Returns:
+            tuple: (indice de la feature, seuil optimal)
+        """
         X = np.array([self.Gini_split_criterion_one_feature(
             node, i) for i in range(self.explanatory.shape[1])])
         i = np.argmin(X[:, 1])
