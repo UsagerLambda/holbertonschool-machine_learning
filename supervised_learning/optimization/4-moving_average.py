@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 """Calculate weighted moving average (with bias correction)."""
 
-import numpy as np
-import tensorflow as tf
-
 
 def moving_average(data, beta):
     """
