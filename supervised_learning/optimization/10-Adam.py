@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Set up the Adam optimization algorithm in TensorFlow."""
 
-import numpy as np
 import tensorflow as tf
 
 
