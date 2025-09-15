@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Calculate the sensitivity for each class in confisuion matrix."""
 
 import numpy as np
 
