@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Module containing L2 regularization gradient descent implementation."""
 
-import numpy as np
 import tensorflow as tf
 
 
