@@ -27,7 +27,8 @@ def dropout_gradient_descent(Y, weights, cache, alpha, keep_prob, L):
     for i in range(L, 0, -1):
         A_prev = cache[f"A{i-1}"]  # Activation de la couche precedente
 
-        DW = np.matmul(DZ, A_prev.T) / m  # Calcul gradient des poids
+        DW = np.matmul(DZ, A_prev.T) / m  # Calcul gradient des poids + biais
+        DB = np.sum(DZ, axis=1, keepdims=True) / m
 
         if i > 1:
             # Calcul du gradient par rapport à A_prev
@@ -43,3 +44,4 @@ def dropout_gradient_descent(Y, weights, cache, alpha, keep_prob, L):
             DZ = dA_prev * derivative_A_prev
 
         weights[f"W{i}"] = weights[f"W{i}"] - alpha * DW
+        weights[f"b{i}"] = weights[f"b{i}"] - alpha * DB
