@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Crée une couche avec régularisation dropout."""
 
-import numpy as np
 import tensorflow as tf
 
 
