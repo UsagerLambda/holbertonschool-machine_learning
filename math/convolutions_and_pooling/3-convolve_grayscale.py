@@ -45,8 +45,8 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
         # + kh = ajoute la taille du kernel (aire de kh x kw)
         # - h = retire la taille originale pour le padding total
         # → // 2 = divise par 2 pour chaque côté opposé
-        pad_h = ((h - 1) * sh + kh - h) // 2
-        pad_w = ((w - 1) * sw + kw - w) // 2
+        pad_h = ((h - 1) * sh + kh - h) // 2 + 1
+        pad_w = ((w - 1) * sw + kw - w) // 2 + 1
     elif padding == 'valid':
         pad_h, pad_w = 0, 0
 
