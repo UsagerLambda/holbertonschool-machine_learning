@@ -37,17 +37,27 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
 
     if isinstance(padding, tuple):
         pad_h, pad_w = padding
-        nh = h + 2 * pad_h - (kh - 1)
-        nw = w + 2 * pad_w - (kw - 1)
-    if padding == 'same':
-        pad_h = kh // 2
-        pad_w = kw // 2
-        nh = h
-        nw = w
+    elif padding == 'same':
+        # (h-1)*sh = position du dernier pixel intégré du kernel
+        # dans l'axe visé
+        # Exemple: si h=28 et stride=2, le kernel n'ira pas en 28 car il se
+        # déplace de 2 en 2 et 29 n'existe pas
+        # + kh = ajoute la taille du kernel (aire de kh x kw)
+        # - h = retire la taille originale pour le padding total
+        # → // 2 = divise par 2 pour chaque côté opposé
+        pad_h = ((h - 1) * sh + kh - h) // 2
+        pad_w = ((w - 1) * sw + kw - w) // 2
     elif padding == 'valid':
         pad_h = pad_w = 0
-        nh = (h - kh) // sh + 1
-        nw = (w - kw) // sw + 1
+
+    # h = taille initiale de l'image
+    # 2 * pad_h/w ajoute les pixels fictifs du padding
+    # (x2 pour chaque côté opposé)
+    # -kh/w retire la taille du kernel, car il doit rester dans l'image
+    # → // sh/w (divisé par le stride) nombre de déplacements possibles
+    # + 1 (ajoute la position initiale)
+    nh = ((h + 2 * pad_h - kh) // sh) + 1
+    nw = ((w + 2 * pad_w - kw) // sw) + 1
 
     output = np.zeros((m, nh, nw))
 
