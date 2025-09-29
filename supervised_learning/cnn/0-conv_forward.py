@@ -35,7 +35,7 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
     Returns:
         numpy.ndarray: sortie de la couche de convolution
     """
-    m, h_prev, w_prev, c_prev = A_prev.s_prevape
+    m, h_prev, w_prev, c_prev = A_prev.shape
     kh, kw, kc, c_new = W.shape
     sh, sw = stride
     kc = c_prev
@@ -43,8 +43,8 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
     if isinstance(padding, tuple):
         pad_h, pad_w = padding
     elif padding == 'same':
-        pad_h = ((h_prev - 1) * sh + kh - h_prev) // 2
-        pad_w = ((w_prev - 1) * sw + kw - w_prev) // 2
+        pad_h = ((h_prev - 1) * sh + kh - h_prev) // 2 + 1
+        pad_w = ((w_prev - 1) * sw + kw - w_prev) // 2 + 1
     elif padding == 'valid':
         pad_h, pad_w = 0, 0
 
