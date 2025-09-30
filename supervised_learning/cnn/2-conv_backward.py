@@ -47,8 +47,8 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     if isinstance(padding, tuple):
         pad_h, pad_w = padding
     elif padding == 'same':
-        pad_h = ((h_prev - 1) * sh + kh - h_prev) // 2
-        pad_w = ((w_prev - 1) * sw + kw - w_prev) // 2
+        pad_h = ((h_prev - 1) * sh + kh - h_prev) // 2 + 1
+        pad_w = ((w_prev - 1) * sw + kw - w_prev) // 2 + 1
     elif padding == 'valid':
         pad_h, pad_w = 0, 0
 
