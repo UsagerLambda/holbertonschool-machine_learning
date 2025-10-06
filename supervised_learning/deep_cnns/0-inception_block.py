@@ -37,6 +37,7 @@ def inception_block(A_prev, filters):
         padding="same",
     )(A_prev)
 
+ 
     # F3R : convolution 1x1 avant la convolution 3x3.
     conv_F3R = K.layers.Conv2D(
         filters=F3R,
@@ -44,20 +45,6 @@ def inception_block(A_prev, filters):
         activation="relu",
         padding="valid",
     )(A_prev)
-
-    # F5R : convolution 1x1 avant la convolution 5x5.
-    conv_F5R = K.layers.Conv2D(
-        filters=F5R,
-        kernel_size=(1, 1),
-        activation="relu",
-        padding="valid",
-    )(A_prev)
-
-    # Pooling
-    max_pool = K.layers.MaxPooling2D(pool_size=(3, 3), strides=(
-        1, 1), padding="same")(A_prev)
-
-    # 2nd layer de convolution ================================================
 
     # F3 : convolution 3x3
     conv_F3 = K.layers.Conv2D(
@@ -67,6 +54,14 @@ def inception_block(A_prev, filters):
         padding="same",
     )(conv_F3R)
 
+    # F5R : convolution 1x1 avant la convolution 5x5.
+    conv_F5R = K.layers.Conv2D(
+        filters=F5R,
+        kernel_size=(1, 1),
+        activation="relu",
+        padding="valid",
+    )(A_prev)
+
     # F5 : convolution 5x5
     conv_F5 = K.layers.Conv2D(
         filters=F5,
@@ -74,6 +69,14 @@ def inception_block(A_prev, filters):
         activation="relu",
         padding="same",
     )(conv_F5R)
+
+    # Pooling
+    max_pool = K.layers.MaxPooling2D(
+        pool_size=(3, 3),
+        strides=(
+        1, 1),
+        padding="same"
+    )(A_prev)
 
     # FPP : convolution 1x1
     conv_FPP = K.layers.Conv2D(
