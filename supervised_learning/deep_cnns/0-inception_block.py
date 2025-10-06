@@ -27,8 +27,6 @@ def inception_block(A_prev, filters):
     """
     F1, F3R, F3, F5R, F5, FPP = filters
 
-    # 1st layer de convolution ================================================
-
     # F1 : convolution 1x1
     conv_F1 = K.layers.Conv2D(
         filters=F1,
@@ -37,7 +35,6 @@ def inception_block(A_prev, filters):
         padding="same",
     )(A_prev)
 
- 
     # F3R : convolution 1x1 avant la convolution 3x3.
     conv_F3R = K.layers.Conv2D(
         filters=F3R,
@@ -73,8 +70,7 @@ def inception_block(A_prev, filters):
     # Pooling
     max_pool = K.layers.MaxPooling2D(
         pool_size=(3, 3),
-        strides=(
-        1, 1),
+        strides=(1, 1),
         padding="same"
     )(A_prev)
 
