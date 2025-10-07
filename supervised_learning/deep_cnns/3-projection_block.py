@@ -26,7 +26,6 @@ def projection_block(A_prev, filters, s=2):
         padding='same',
         kernel_initializer=he_init
     )(A_prev)
-
     norm1 = K.layers.BatchNormalization(axis=3)(conv1)
     A = K.layers.Activation('relu')(norm1)
 
@@ -35,21 +34,9 @@ def projection_block(A_prev, filters, s=2):
         kernel_size=(3, 3),
         padding='same',
         kernel_initializer=he_init
-    )(A_prev)
-
+    )(A)
     norm2 = K.layers.BatchNormalization(axis=3)(conv2)
     B = K.layers.Activation('relu')(norm2)
-
-    # Ajout -------------------------------------------------------------------
-    convbis = K.layers.Conv2D(
-        filters=F12,
-        kernel_size=(1, 1),
-        strides=(s, s),
-        padding='same',
-        kernel_initializer=he_init
-    )(A)
-    A_bis = K.layers.BatchNormalization(axis=3)(convbis)
-    # -------------------------------------------------------------------------
 
     conv3 = K.layers.Conv2D(
         filters=F12,
@@ -57,9 +44,19 @@ def projection_block(A_prev, filters, s=2):
         padding='same',
         kernel_initializer=he_init
     )(B)
-    norm3 = K.layers.BatchNormalization(axis=3)(conv3)
 
-    C = K.layers.Add()([A_bis, norm3])
+    convbis = K.layers.Conv2D(
+        filters=F12,
+        kernel_size=(1, 1),
+        padding='same',
+        strides=(s, s),
+        kernel_initializer=he_init
+    )(A_prev)
+
+    norm3 = K.layers.BatchNormalization(axis=3)(conv3)
+    A_bis = K.layers.BatchNormalization(axis=3)(convbis)
+
+    C = K.layers.Add()([norm3, A_bis])
     model = K.layers.Activation('relu')(C)
 
     return model
