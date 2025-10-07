@@ -28,7 +28,7 @@ def projection_block(A_prev, filters, s=2):
     )(A_prev)
 
     norm1 = K.layers.BatchNormalization(axis=3)(conv1)
-    A = K.layers.ReLU()(norm1)
+    A = K.layers.Activation('relu')(norm1)
 
     conv2 = K.layers.Conv2D(
         filters=F3,
@@ -38,7 +38,7 @@ def projection_block(A_prev, filters, s=2):
     )(A)
 
     norm2 = K.layers.BatchNormalization(axis=3)(conv2)
-    B = K.layers.ReLU()(norm2)
+    B = K.layers.Activation('relu')(norm2)
 
     # Ajout -------------------------------------------------------------------
     convbis = K.layers.Conv2D(
@@ -59,7 +59,7 @@ def projection_block(A_prev, filters, s=2):
     )(B)
     norm3 = K.layers.BatchNormalization(axis=3)(conv3)
 
-    C = K.layers.Add()([norm3, A_bis])
-    model = K.layers.ReLU()(C)
+    C = K.layers.Add()([A_bis, norm3])
+    model = K.layers.Activation('relu')(C)
 
     return model
