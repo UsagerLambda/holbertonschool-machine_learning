@@ -29,7 +29,7 @@ def resnet50():
         filters=64,
         kernel_size=(7, 7),
         strides=(2, 2),
-        activation="relu",
+        activation="linear",
         padding="same",
         kernel_initializer=he_init
     )(X)
