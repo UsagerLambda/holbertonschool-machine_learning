@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Construit l'architecture DenseNet-121 telle que décrite dans l'article."""
 
 
 from tensorflow import keras as K
@@ -7,6 +8,20 @@ transition_layer = __import__('6-transition_layer').transition_layer
 
 
 def densenet121(growth_rate=32, compression=1.0):
+    """
+    Construit l'architecture DenseNet-121 telle que décrite dans l'article.
+
+    "Densely Connected Convolutional Networks" (2017).
+
+    Args:
+        growth_rate (int): Le taux de croissance pour les blocs denses.
+            Par défaut, 32.
+        compression (float): Le facteur de compression pour les couches
+            de transition. Par défaut, 1.0 (pas de compression).
+
+    Returns:
+        keras.Model: Le modèle DenseNet-121 construit.
+    """
     X = K.Input(shape=(224, 224, 3))
     he_init = K.initializers.HeNormal(seed=0)
 
