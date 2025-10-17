@@ -1,0 +1,4 @@
+# Requirements spécifiques à macOS (Apple Silicon M1/M2)
+# Optimisations GPU pour processeurs Apple Silicon
+tensorflow-macos
+tensorflow-metal

@@ -1,0 +1,8 @@
+# Requirements for Transfer Learning CIFAR-10 Project
+# Compatible Python 3.8+
+
+# Core dependencies (cross-platform)
+tensorflow
+numpy
+matplotlib
+numpy
