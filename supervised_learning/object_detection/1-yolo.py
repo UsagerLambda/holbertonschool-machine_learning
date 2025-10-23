@@ -92,6 +92,8 @@ class Yolo:
 
             # On récupère les ancres correspondant à cette échelle
             anchors = self.anchors[i]
+            pw = anchors[:, 0].reshape(1, 1, anchor_boxes)
+            ph = anchors[:, 1].reshape(1, 1, anchor_boxes)
 
             # Calcule la position normalisée (entre 0 et 1) du centre
             # de la boîte dans l'image.
@@ -109,8 +111,8 @@ class Yolo:
             # Multiplie la largeur/hauteur de l'ancre par l'exponentiel
             # de t_w/t_h, puis divise par la largeur/hauteur de l'image
             # pour normaliser (entre 0 et 1).
-            b_w = anchors[:, 0] * np.exp(t_w) / input_width
-            b_h = anchors[:, 1] * np.exp(t_h) / input_height
+            b_w = (pw * np.exp(t_w)) / input_width
+            b_h = (ph * np.exp(t_h)) / input_height
 
             # Coin supérieur gauche
             x1 = (b_x - b_w / 2) * image_width
