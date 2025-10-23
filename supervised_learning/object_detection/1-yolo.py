@@ -85,10 +85,11 @@ class Yolo:
 
             # Coordonnées (x, y) du coin haut gauche de chaque
             # cellule de la grille (voir image)
-            c_x = np.tile(np.arange(grid_w).reshape(1, grid_w, 1),
-                          (grid_h, 1, anchor_boxes))
-            c_y = np.tile(np.arange(grid_h).reshape(grid_h, 1, 1),
-                          (1, grid_w, anchor_boxes))
+            c_x = np.arange(grid_w).reshape(1, grid_w, 1)
+            c_x = np.tile(c_x, (grid_h, 1, anchor_boxes))
+
+            c_y = np.arange(grid_h).reshape(grid_h, 1, 1)
+            c_y = np.tile(c_y, (1, grid_w, anchor_boxes))
 
             # On récupère les ancres correspondant à cette échelle
             anchors = self.anchors[i]
