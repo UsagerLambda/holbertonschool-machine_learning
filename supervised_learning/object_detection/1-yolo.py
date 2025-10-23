@@ -56,6 +56,10 @@ class Yolo:
             """Fonction sigmoïde pour ramener les valeurs entre 0 et 1."""
             return 1 / (1 + np.exp(-x))
 
+        # Récupérer la taille d'entrée du modèle
+        model_input_height = self.model.input.shape[1]
+        model_input_width = self.model.input.shape[2]
+
         # Dimensions réelles de l'image
         image_height, image_width = image_size
 
@@ -106,8 +110,8 @@ class Yolo:
             # Multiplie la largeur/hauteur de l'ancre par l'exponentiel
             # de t_w/t_h, puis divise par la largeur/hauteur de l'image
             # pour normaliser (entre 0 et 1).
-            b_w = anchors[:, 0] * np.exp(t_w) / image_width
-            b_h = anchors[:, 1] * np.exp(t_h) / image_height
+            b_w = anchors[:, 0] * np.exp(t_w) / model_input_width
+            b_h = anchors[:, 1] * np.exp(t_h) / model_input_height
 
             # Coin supérieur gauche
             x1 = (b_x - b_w / 2) * image_width
