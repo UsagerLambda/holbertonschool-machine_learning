@@ -56,8 +56,8 @@ class Yolo:
             """Fonction sigmoïde pour ramener les valeurs entre 0 et 1."""
             return 1 / (1 + np.exp(-x))
 
-        input_height = self.model.input.shape[1]
-        input_width = self.model.input.shape[2]
+        input_width = self.model.input.shape[1]
+        input_height = self.model.input.shape[2]
 
         # Dimensions réelles de l'image
         image_height, image_width = image_size[0], image_size[1]
@@ -116,11 +116,11 @@ class Yolo:
             b_h = (ph * np.exp(t_h)) / input_height
 
             # Coin supérieur gauche
-            x1 = (b_x - b_w / 2) * input_width
-            y1 = (b_y - b_h / 2) * input_height
+            x1 = (b_x - b_w / 2) * image_width
+            y1 = (b_y - b_h / 2) * image_height
             # Coin inférieur droit
-            x2 = (b_x + b_w / 2) * input_width
-            y2 = (b_y + b_h / 2) * input_height
+            x2 = (b_x + b_w / 2) * image_width
+            y2 = (b_y + b_h / 2) * image_height
 
             # On empile toutes les coordonnées
             # ensemble dans un seul tableau
