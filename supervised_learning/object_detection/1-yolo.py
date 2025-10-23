@@ -56,9 +56,8 @@ class Yolo:
             """Fonction sigmoïde pour ramener les valeurs entre 0 et 1."""
             return 1 / (1 + np.exp(-x))
 
-        # Récupérer la taille d'entrée du modèle
-        model_input_height = self.model.input.shape[1]
-        model_input_width = self.model.input.shape[2]
+        model_input_height = 416
+        model_input_width = 416
 
         # Dimensions réelles de l'image
         image_height, image_width = image_size
