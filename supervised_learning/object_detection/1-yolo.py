@@ -92,9 +92,9 @@ class Yolo:
             c_y = np.tile(c_y, (1, grid_w, anchor_boxes))
 
             # On récupère les ancres correspondant à cette échelle
-            anchors = self.anchors[i]
-            pw = anchors[:, 0].reshape(1, 1, anchor_boxes)
-            ph = anchors[:, 1].reshape(1, 1, anchor_boxes)
+            current_anchors = self.anchors[i]
+            pw = current_anchors[:, 0].reshape(1, 1, anchor_boxes)
+            ph = current_anchors[:, 1].reshape(1, 1, anchor_boxes)
 
             # Calcule la position normalisée (entre 0 et 1) du centre
             # de la boîte dans l'image.
