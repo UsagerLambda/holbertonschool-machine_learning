@@ -60,7 +60,7 @@ class Yolo:
         input_width = self.model.input.shape[2]
 
         # Dimensions réelles de l'image
-        image_height, image_width = image_size
+        image_height, image_width = image_size[0], image_size[1]
 
         boxes = []  # Stocke les boîtes finales
         box_confidences = []  # Stock les confiances des boîtes
