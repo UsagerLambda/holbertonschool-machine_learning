@@ -116,11 +116,11 @@ class Yolo:
             b_h = (ph * np.exp(t_h)) / input_height
 
             # Coin supérieur gauche
-            x1 = (b_x - b_w / 2) * image_width
-            y1 = (b_y - b_h / 2) * image_height
+            x1 = (b_x - b_w / 2) * input_width
+            y1 = (b_y - b_h / 2) * input_height
             # Coin inférieur droit
-            x2 = (b_x + b_w / 2) * image_width
-            y2 = (b_y + b_h / 2) * image_height
+            x2 = (b_x + b_w / 2) * input_width
+            y2 = (b_y + b_h / 2) * input_height
 
             # On empile toutes les coordonnées
             # ensemble dans un seul tableau
