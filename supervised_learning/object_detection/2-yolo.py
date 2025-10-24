@@ -61,8 +61,8 @@ class Yolo:
         else:
             input_shape = self.model.input.shape
 
-        input_height = input_shape[1] if input_shape[1] is not None else 416
-        input_width = input_shape[2] if input_shape[2] is not None else 416
+        input_height = input_shape[1]
+        input_width = input_shape[2]
 
         # Dimensions réelles de l'image
         image_height, image_width = image_size[0], image_size[1]
@@ -195,4 +195,4 @@ class Yolo:
         box_classes = np.concatenate(box_classes, axis=0)
         box_scores = np.concatenate(box_scores, axis=0)
 
-        return filtered_boxes, box_classes, box_scores
+        return (filtered_boxes, box_classes, box_scores)
