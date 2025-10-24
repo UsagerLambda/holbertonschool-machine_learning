@@ -182,7 +182,6 @@ class Yolo:
 
             # Mask = True si la condition est vrai sinon False
             mask = box_score >= self.class_t
-            print(mask)
 
             # Ajoute dans filtered_boxes les boîtes où mask=True
             filtered_boxes.append(boxes[i][mask])
