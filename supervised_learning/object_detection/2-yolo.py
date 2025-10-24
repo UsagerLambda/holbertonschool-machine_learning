@@ -61,8 +61,8 @@ class Yolo:
         else:
             input_shape = self.model.input.shape
 
-        input_height = input_shape[1]
-        input_width = input_shape[2]
+        input_width = self.model.input.shape[1]
+        input_height = self.model.input.shape[2]
 
         # Dimensions réelles de l'image
         image_height, image_width = image_size[0], image_size[1]
