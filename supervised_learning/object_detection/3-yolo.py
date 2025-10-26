@@ -233,38 +233,36 @@ class Yolo:
 
         # Pour chaque classe récupéré
         for cls in unique_classes:
-            # Indice des boxes de la classe courante
+            # Masque pour extraire les boîtes de la classe courante
             mask = box_classes == cls
-            # Récupère les zones ayant les indices de la classe idxs_boxes
+            # Récupère les boîtes de la classe courante
             cls_boxes = filtered_boxes[mask]
-            # Pareil pour les scores
+            # Récupère les scores de la classe courante
             cls_scores = box_scores[mask]
 
-            # Trie les indices des valeurs de cls_scores dans
-            # l'ordre décroissant
+            # Trie par score décroissant
             sorted_indices = np.argsort(-cls_scores)
-            # Organise les boxes selon l'ordre des scores
             cls_boxes = cls_boxes[sorted_indices]
-            # Organise les scores selon l'ordre des scores
             cls_scores = cls_scores[sorted_indices]
 
-            # Liste pour sauvegarder la boxe avec le score le plus élevé
-            keep = []
+            # Listes pour stocker les boîtes et scores gardés
+            keep_boxes = []
+            keep_scores = []
 
-            # Parcourir les boxes
-            i = 0
-            while i < len(cls_boxes):
-                # Ajoute l'index traité dans la liste
-                keep.append(i)
+            # Parcourir les boxes avec la méthode simplifiée
+            while len(cls_boxes) > 0:
+                # Garder la première boîte (meilleur score restant)
+                keep_boxes.append(cls_boxes[0])
+                keep_scores.append(cls_scores[0])
 
-                # Casse la boucle si c'est le dernier indice
-                if i == len(cls_scores) - 1:
+                # Si c'était la dernière boîte, terminer
+                if len(cls_boxes) == 1:
                     break
 
-                # Récupère la boite à l'indice itéré
-                current_box = cls_boxes[i]
-                # Récupère les boites qui suivent la boite de l'indice itéré
-                remaining_boxes = cls_boxes[i + 1:]
+                # Récupère la boite courante (première)
+                current_box = cls_boxes[0]
+                # Récupère les boites restantes
+                remaining_boxes = cls_boxes[1:]
 
                 # Coordonnées de l'intersection entre les boîtes
                 # max des X gauches
@@ -276,20 +274,21 @@ class Yolo:
                 # min des Y bas
                 y2 = np.minimum(current_box[3], remaining_boxes[:, 3])
 
+                # Aire d'intersection (0 si pas de chevauchement)
                 inter_w = np.maximum(0, x2 - x1)
                 inter_h = np.maximum(0, y2 - y1)
                 inter_area = inter_w * inter_h
 
-                # Calcul l'aire des boxes avec
-                # la current box - l'aire de chevauchement
-                # Aire de la box
+                # Aire de la box courante
                 box_area = (current_box[2] - current_box[0]) * \
                            (current_box[3] - current_box[1])
+
                 # Aires des autres boxes
                 other_areas = (
                     remaining_boxes[:, 2] - remaining_boxes[:, 0]) * \
                     (remaining_boxes[:, 3] - remaining_boxes[:, 1])
-                # Aire total des boxes avec current_box - aire de chevauchement
+
+                # Aire totale des boxes - aire de chevauchement
                 union_area = box_area + other_areas - inter_area
 
                 # IoU (pourcentage de chevauchement)
@@ -299,44 +298,26 @@ class Yolo:
                 # other_areas = 10000 px²
                 # union_area = 10000 + 10000 - 3000 = 17000 px²
                 # IoU = 3000 / 17000 = 0.176  ← 17.6% de chevauchement
-
                 iou = inter_area / union_area
 
-                # On garde seulement les boxes avec un IoU inférieur à nms_t
-                # keep_mask est un tableau de boolean
-                keep_mask = iou <= self.nms_t
+                # Garde seulement les boxes avec un IoU inférieur à nms_t
+                # (pas de chevauchement excessif)
+                keep_mask = iou < self.nms_t
 
-                # Garde les indices des boxes par rapport au masque (keep_mask)
-                # i + 1 sert à correspondre au tableau cls_boxes
-                # Exemple:
-                # i = 1  # On traite la boîte à l'indice 1
-                # current_box = cls_boxes[i]           # Boîte à l'indice 1
-                # remaining_boxes = cls_boxes[i + 1:]  # Commence à l'indice 2
-                remaining_indices = np.where(keep_mask)[0] + i + 1
+                # Mettre à jour les tableaux : retire la première boîte
+                # et garde uniquement celles avec IoU faible
+                cls_boxes = cls_boxes[1:][keep_mask]
+                cls_scores = cls_scores[1:][keep_mask]
 
-                # Reconstruit les tableaux cls_boxes/scores
-                # en supprimant les boxes indésirables (< IoU)
-                cls_boxes = np.concatenate([cls_boxes[:i + 1],
-                                           cls_boxes[remaining_indices]])
-                cls_scores = np.concatenate([cls_scores[:i + 1],
-                                            cls_scores[remaining_indices]])
+            # Ajouter les résultats de cette classe
+            if len(keep_boxes) > 0:
+                box_predictions.append(np.array(keep_boxes))
+                predicted_box_classes.append(np.full(len(keep_boxes), cls))
+                predicted_box_scores.append(np.array(keep_scores))
 
-                i += 1  # Passe à la prochaine box
-
-            # Récupérer les indices originaux des boîtes gardées
-            original_indices = sorted_indices[keep]
-
-            # Récupérer les boîtes originales via le masque
-            cls_indices = np.where(mask)[0]
-            final_indices = cls_indices[original_indices]
-
-            # Ajouter aux résultats
-            box_predictions.extend(filtered_boxes[final_indices])
-            predicted_box_classes.extend([cls] * len(final_indices))
-            predicted_box_scores.extend(box_scores[final_indices])
-
-        box_predictions = np.array(box_predictions)
-        predicted_box_classes = np.array(predicted_box_classes)
-        predicted_box_scores = np.array(predicted_box_scores)
+        # Concaténer tous les résultats
+        box_predictions = np.concatenate(box_predictions, axis=0)
+        predicted_box_classes = np.concatenate(predicted_box_classes, axis=0)
+        predicted_box_scores = np.concatenate(predicted_box_scores, axis=0)
 
         return box_predictions, predicted_box_classes, predicted_box_scores
