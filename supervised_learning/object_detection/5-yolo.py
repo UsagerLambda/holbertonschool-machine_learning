@@ -375,7 +375,7 @@ class Yolo:
             )
 
             # Normalisation [0, 1]
-            normalized = resized.astype(np.float32) / 255.0
+            normalized = resized / 255.0
 
             pimages.append(normalized)
 
