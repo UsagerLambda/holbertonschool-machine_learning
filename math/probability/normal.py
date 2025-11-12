@@ -48,3 +48,27 @@ class Normal:
             variance = (1 / len(data)) * first
 
             self.stddev = float(variance ** 0.5)
+
+    def z_score(self, x):
+        """
+        Calcule le score z d'une valeur x.
+
+        Args:
+            x (float): Valeur à transformer en score z.
+
+        Returns:
+            float: Score z correspondant à x.
+        """
+        return (x - self.mean) / self.stddev
+
+    def x_value(self, z):
+        """
+        Calcule la valeur x à partir d'un score z.
+
+        Args:
+            z (float): Score z à transformer en valeur x.
+
+        Returns:
+            float: Valeur x correspondant au score z.
+        """
+        return z * self.stddev + self.mean
