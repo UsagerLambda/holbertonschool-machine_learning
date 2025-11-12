@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Module pour la distribution de Poisson."""
 
 
