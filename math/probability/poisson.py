@@ -93,5 +93,5 @@ class Poisson:
             kfact *= i
 
         # Calculer la PMF: P(X = k) = (λ^k * e^(-λ)) / k!
-        result = ((e ** (-self.lambtha)) * (self.lambtha ** k)) / kfact
+        result = float(((e ** (-self.lambtha)) * (self.lambtha ** k)) / kfact)
         return result
