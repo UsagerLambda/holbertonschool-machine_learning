@@ -63,3 +63,16 @@ class Exponential:
                     "data must contain multiple values")
 
             self.lambtha = float(1 / (sum(data) / len(data)))
+
+    def pdf(self, x):
+        """Calculate la valeur du PDF pour une période donnée.
+
+        Args:
+            x (int): time period
+
+        Returns:
+            float: PDF value
+        """
+        if x < 0:
+            return 0
+        return (self.lambtha * (e ** (-self.lambtha * x)))
