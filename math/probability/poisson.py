@@ -94,3 +94,30 @@ class Poisson:
         # Calculer la PMF: P(X = k) = (λ^k * e^(-λ)) / k!
         result = float(((e ** (-self.lambtha)) * (self.lambtha ** k)) / kfact)
         return result
+
+    def cdf(self, k):
+        """
+        Calculate la value de CDF pour un nombre donné de succès.
+
+        Args:
+            k (int): nombre de succès
+
+        Returns:
+            float: valeur de CDF pour k succès
+        """
+        k = int(k)
+        if k < 0:
+            return 0
+        result = 0
+
+        for i in range(k+1):
+
+            # Calcul la factoriel de i
+            ifact = 1
+            for j in range(1, i + 1):
+                ifact *= j
+            # -------------------------
+
+            result += (e ** (-self.lambtha) * ((self.lambtha ** i) / ifact))
+
+        return result
