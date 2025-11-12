@@ -51,7 +51,7 @@ class Normal:
 
     def z_score(self, x):
         """
-        Calcule le score z d'une valeur x.
+        Calculate the z-score of a value x.
 
         Args:
             x (float): Valeur à transformer en score z.
@@ -63,7 +63,7 @@ class Normal:
 
     def x_value(self, z):
         """
-        Calcule la valeur x à partir d'un score z.
+        Calculate the x value from a z-score.
 
         Args:
             z (float): Score z à transformer en valeur x.
@@ -72,3 +72,51 @@ class Normal:
             float: Valeur x correspondant au score z.
         """
         return z * self.stddev + self.mean
+
+    def pdf(self, x):
+        """
+        Calculate the probability density function (PDF) for a value x.
+
+        Calcule la densité de probabilité (PDF) pour une valeur x
+        selon la distribution normale.
+
+        Args:
+            x (float): Valeur pour laquelle calculer la densité.
+
+        Returns:
+            float: Densité de probabilité de x.
+        """
+        first = 1 / (self.stddev * ((2 * pi) ** 0.5))
+        second = e ** (- ((x - self.mean) ** 2) / (2 * (self.stddev ** 2)))
+        return first * second
+
+    def cdf(self, x):
+        """
+        Calculate the cumulative distribution function (CDF) for a value x.
+
+        Calcule la fonction de répartition cumulative (CDF) pour une valeur x
+        selon la distribution normale.
+
+        Args:
+            x (float): Valeur pour laquelle calculer la probabilité cumulative.
+
+        Returns:
+            float: Probabilité cumulative de x.
+        """
+        def erf(x):
+            """
+            Approximation de la fonction d'erreur (erf) pour une valeur x.
+
+            Args:
+                x (float): Valeur pour laquelle calculer erf.
+
+            Returns:
+                float: Valeur approchée de erf(x).
+            """
+            return (2 / (pi ** 0.5)) * (
+                x - ((x ** 3) / 3) + (
+                    (x ** 5) / 10) + (
+                    (x ** 7) / 42) + (
+                    (x ** 9) / 216))
+
+        return 0.5 * (1 + erf(x))
