@@ -80,8 +80,7 @@ class Poisson:
             float: valeur du PMF
         """
         # Vérifie que k est un entier
-        if not isinstance(k, int):
-            return 0
+        k = int(k)
 
         # Vérifie si k est out of range
         if k < 0:
