@@ -42,6 +42,9 @@ class Normal:
 
             self.mean = float(sum(data) / len(data))
 
-            variance = sum((x - self.mean) ** 2 for x in data) / (
-                len(data) - 1)
+            first = 0
+            for x in data:
+                first += (x - self.mean) ** 2
+            variance = (1 / len(data)) * first
+
             self.stddev = float(variance ** 0.5)
