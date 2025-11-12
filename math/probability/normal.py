@@ -29,7 +29,7 @@ class Normal:
         self.stddev = float(stddev)
 
         if data is None:
-            if stddev < 0:
+            if stddev <= 0:
                 raise ValueError("stddev must be a positive value")
 
         else:
