@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Module pour la distribution de Poisson."""
 
+e = 2.7182818285
+pi = 3.1415926536
+
 
 class Poisson:
     """Classe représentant une distribution de Poisson."""
@@ -65,3 +68,30 @@ class Poisson:
             # des données pour récupérer la moyenne
             # lambda = moyenne
             self.lambtha = float(sum(data) / len(data))
+
+    def pmf(self, k):
+        """
+        Calculate la valeur du PMF pour un nombre k de succès.
+
+        Args:
+            k (int): nombre de success
+
+        Returns:
+            float: valeur du PMF
+        """
+        # Vérifie que k est un entier
+        if not isinstance(k, int):
+            return 0
+
+        # Vérifie si k est out of range
+        if k < 0:
+            return 0
+
+        # Calcul la factorielle de k
+        kfact = 1
+        for i in range(1, k + 1):
+            kfact *= i
+
+        # Calculer la PMF: P(X = k) = (λ^k * e^(-λ)) / k!
+        result = ((e ** (-self.lambtha)) * (self.lambtha ** k)) / kfact
+        return result
