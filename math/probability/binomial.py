@@ -93,3 +93,33 @@ class Binomial:
             return res
         coef = fact(self.n) / (fact(k) * fact(self.n - k))
         return coef * (self.p ** k) * ((1 - self.p) ** (self.n - k))
+
+    def cdf(self, k):
+        """
+        Calcule la fonction de répartition cumulative (CDF)
+            pour une valeur donnée k.
+
+        La CDF d'une distribution binomiale donne la probabilité d'obtenir
+        au plus k succès lors de n essais indépendants, chacun ayant une
+        probabilité p de succès.
+
+        Args:
+            k (int): Nombre de succès pour lequel calculer
+                la probabilité cumulative.
+
+        Returns:
+            float: Probabilité d'obtenir au plus k succès.
+        """
+        k = int(k)
+
+        if k < 0:
+            return 0
+
+        if k > self.n:
+            return 0
+
+        cdf_value = 0
+        for i in range(0, k + 1):
+            cdf_value += self.pmf(i)
+
+        return cdf_value
