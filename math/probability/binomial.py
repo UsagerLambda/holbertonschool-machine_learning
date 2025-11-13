@@ -59,3 +59,29 @@ class Binomial:
 
             # p = μ / n (avec n arrondi)
             self.p = mean / self.n
+
+    def pmf(self, k):
+        """
+        Calculate la probabilité de masse (PMF) pour une valeur donnée k.
+
+        La PMF d'une distribution binomiale donne la probabilité d'obtenir
+        exactement k succès lors de n essais indépendants, chacun ayant une
+        probabilité p de succès.
+
+        Args:
+            k (int): Nombre de succès pour lequel calculer la probabilité.
+
+        Returns:
+            float: Probabilité d'obtenir exactement k succès.
+
+        Raises:
+            ValueError: Si k n'est pas dans l'intervalle [0, n].
+        """
+        def fact(x):
+            """Calculate the factorial of x."""
+            res = 1
+            for i in range(1, x + 1):
+                res *= i
+            return res
+        coef = fact(self.n) / (fact(k) * fact(self.n - k))
+        return coef * (self.p ** k) * ((1 - self.p) ** (self.n - k))
