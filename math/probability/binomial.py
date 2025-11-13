@@ -77,6 +77,14 @@ class Binomial:
         Raises:
             ValueError: Si k n'est pas dans l'intervalle [0, n].
         """
+        k = int(k)
+
+        if k < 0:
+            return 0
+
+        if k > self.n:
+            return 0
+
         def fact(x):
             """Calculate the factorial of x."""
             res = 1
