@@ -4,6 +4,19 @@
 
 def inverse(matrix):
     """Calculate the inverse of a matrix."""
+    if not isinstance(matrix, list):
+        raise TypeError("matrix must be a list of lists")
+
+    if len(matrix) == 0:
+        raise TypeError("matrix must be a list of lists")
+
+    n = len(matrix)
+    for row in matrix:
+        if not isinstance(row, list):
+            raise TypeError("matrix must be a list of lists")
+        if len(row) != n:
+            raise ValueError("matrix must be a non-empty square matrix")
+
     det = determinant(matrix)
     adj = adjugate(matrix)
     if det == 0:
