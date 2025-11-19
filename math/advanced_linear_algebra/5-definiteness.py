@@ -19,6 +19,9 @@ def definiteness(matrix):
     if len(matrix) != 2:
         return None
 
+    if not np.allclose(matrix, matrix.T):
+        return None
+
     eigvals = np.linalg.eigvals(matrix)
 
     if np.all(eigvals > 0):
