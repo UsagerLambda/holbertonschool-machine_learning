@@ -86,10 +86,10 @@ def intersection(x, n, P, Pr):
     if not isinstance(Pr, np.ndarray) or Pr.shape != P.shape:
         raise TypeError("Pr must be a numpy.ndarray with the same shape as P")
 
-    for array in [P, Pr]:
+    for name, array in [P, Pr]:
         if np.any((array < 0) | (array > 1)):
             raise ValueError(
-                f"All values in {array} must be in the range [0, 1]")
+                f"All values in {name} must be in the range [0, 1]")
 
     if not np.isclose(sum(Pr), 1):
         raise ValueError("Pr must sum to 1")
