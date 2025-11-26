@@ -25,6 +25,10 @@ def pca(X, var=0.95):
     explained_variance = (S ** 2) / np.sum(S ** 2)
     cumulative_variance = np.cumsum(explained_variance)
 
-    nd = np.argmin(cumulative_variance < var) + 1
+    indices = np.where(cumulative_variance >= var)[0]
+    if len(indices) > 0:
+        nd = indices[0] + 1
+    else:
+        nd = len(cumulative_variance)
 
     return Vt[:nd].T
