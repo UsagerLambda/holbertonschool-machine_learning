@@ -20,11 +20,22 @@ def pca(X, var=0.95):
         W (np.ndarray): Array of shape (d, nd)
             where nd is the new dimensionality of the transformed X
     """
-    U, S, Vt = np.linalg.svd(X, full_matrices=False)
-
-    explained_variance = (S ** 2) / np.sum(S ** 2)
+    cov_matrix = np.matmul(X.T, X) / (X.shape[0] - 1)
+    
+    # Calculer les valeurs propres et vecteurs propres
+    eigenvalues, eigenvectors = np.linalg.eig(cov_matrix)
+    
+    # Trier par valeurs propres décroissantes
+    idx = eigenvalues.argsort()[::-1]
+    eigenvalues = eigenvalues[idx]
+    eigenvectors = eigenvectors[:, idx]
+    
+    # Calculer la variance expliquée cumulative
+    explained_variance = eigenvalues / np.sum(eigenvalues)
     cumulative_variance = np.cumsum(explained_variance)
-
+    
+    # Trouver le nombre de composantes nécessaires
     nd = np.argmax(cumulative_variance >= var) + 1
-
-    return Vt[:nd].T
+    
+    # Retourner les nd premiers vecteurs propres
+    return eigenvectors[:, :nd]
