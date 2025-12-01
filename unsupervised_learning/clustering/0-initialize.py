@@ -15,8 +15,11 @@ def initialize(X, k):
             - d is the number of dimensions for each data point
         k (integer): Positive integer containing the number of clusters
     """
-    return np.random.uniform(
-            np.min(X, axis=0),  # valeur min de X pour chaque dimension
-            np.max(X, axis=0),  # valeur max de X pour chaque dimension
-            (k, X.shape[1])  # Forme de retour, k centroïdes de dimension d
-        )
+    try:
+        return np.random.uniform(
+                np.min(X, axis=0),  # valeur min de X pour chaque dimension
+                np.max(X, axis=0),  # valeur max de X pour chaque dimension
+                (k, X.shape[1])  # Forme de retour, k centroïdes de dimension d
+            )
+    except:
+        return None
