@@ -15,6 +15,8 @@ def initialize(X, k):
             - d is the number of dimensions for each data point
         k (integer): Positive integer containing the number of clusters
     """
+    if not isinstance(k, int) or k <= 0:
+        return None
     try:
         return np.random.uniform(
                 np.min(X, axis=0),  # valeur min de X pour chaque dimension
