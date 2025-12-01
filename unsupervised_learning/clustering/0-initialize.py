@@ -23,5 +23,5 @@ def initialize(X, k):
                 np.max(X, axis=0),  # valeur max de X pour chaque dimension
                 (k, X.shape[1])  # Forme de retour, k centroïdes de dimension d
             )
-    except:
+    except Exception:
         return None
