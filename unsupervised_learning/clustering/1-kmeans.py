@@ -33,7 +33,7 @@ def kmeans(X, k, iterations=1000):
 
             # Calcule la distance euclidienne entre chaque point X et
             # chaque centroïde C
-            distances = np.linalg.norm(X[:, None, :] - C[None, :, :], axis=2)
+            distances = np.sqrt(((X[:, np.newaxis] - C) ** 2).sum(axis=2))
 
             # Attribut les points dans le cluster du centroïde le plus proche
             min_distances = distances.min(axis=1, keepdims=True)
