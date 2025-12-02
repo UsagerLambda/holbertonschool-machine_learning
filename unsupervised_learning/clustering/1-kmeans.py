@@ -36,7 +36,8 @@ def kmeans(X, k, iterations=1000):
             distances = np.linalg.norm(X[:, None, :] - C[None, :, :], axis=2)
 
             # Attribut les points dans le cluster du centroïde le plus proche
-            clss = distances.argmin(axis=1)
+            clss = np.argmax(distances == distances.min(
+                axis=1, keepdims=True), axis=1)
 
             # Mise à jour des centroïdes
             for j in range(k):
