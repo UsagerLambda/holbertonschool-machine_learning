@@ -36,9 +36,9 @@ def kmeans(X, k, iterations=1000):
             distances = np.linalg.norm(X[:, None, :] - C[None, :, :], axis=2)
 
             # Attribut les points dans le cluster du centroïde le plus proche
-            clss = distances.argmin(axis=1)
+            min_distances = distances.min(axis=1, keepdims=True)
+            clss = (distances == min_distances).argmax(axis=1)
 
-            empty_clusters = []
             # Mise à jour des centroïdes
             for j in range(k):
                 # Récupère les points du cluster j dans la range clss
@@ -47,19 +47,17 @@ def kmeans(X, k, iterations=1000):
                     # Fait la moyenne et met a jour le centroïde
                     C[j] = pts.mean(axis=0)
                 else:
-                    empty_clusters.append(j)
+                    # Sinon replacer le centroïde de manière aléatoire
+                    C[j] = np.random.uniform(
+                        np.min(X, axis=0),
+                        np.max(X, axis=0),
+                        X.shape[1]
+                    )
 
             # Si les centroïdes n'ont pas ou
             # presque pas bougé à la dernière itération
             if np.allclose(C, Cprev):
                 break  # Sortir de la boucle
-
-            if empty_clusters:
-                C[empty_clusters] = np.random.uniform(
-                    np.min(X, axis=0),
-                    np.max(X, axis=0),
-                    (len(empty_clusters), X.shape[1])
-                )
 
         return C, clss
 
