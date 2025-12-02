@@ -18,7 +18,15 @@ def kmeans(X, k, iterations=1000):
         clss: numpy.ndarray of shape (n,) containing the index of the cluster
         Returns (None, None) if the function fails
     """
+    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
+        return None, None
     if not isinstance(k, int) or k <= 0:
+        return None, None
+    if not isinstance(iterations, int) or iterations <= 0:
+        return None, None
+
+    n, d = X.shape
+    if k > n:
         return None, None
     try:
         # Crée des centroïdes dans les limites min, max des données
