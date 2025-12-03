@@ -30,6 +30,16 @@ def pdf(X, m, S):
             m, np.ndarray) or not isinstance(
                 S, np.ndarray):
         return None
+
+    if X.ndim != 2 or m.ndim != 1 or S.ndim != 2:
+        return None
+    if X.shape[1] != m.shape[
+        0] or S.shape[
+            0] != S.shape[
+                1] or S.shape[
+                    0] != m.shape[0]:
+        return None
+
     d = m.shape[0]  # Nombre de dimension
 
     coeff = (2 * np.pi) ** d * np.linalg.det(S)
