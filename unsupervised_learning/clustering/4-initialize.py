@@ -27,6 +27,9 @@ def initialize(X, k):
     if not isinstance(k, int) or k <= 0:
         return None, None, None
 
+    if not isinstance(X, np.ndarray):
+        return None, None, None
+
     _, d = X.shape
 
     pi = np.full(k, 1/k)
