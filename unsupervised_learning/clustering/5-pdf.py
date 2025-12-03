@@ -50,4 +50,4 @@ def pdf(X, m, S):
     exp = np.sum(diff @ S_inv * diff, axis=1)
     exp_p = np.exp(-0.5 * exp)
 
-    return norm * exp_p
+    return np.maximum(norm * exp_p, 1e-300)
