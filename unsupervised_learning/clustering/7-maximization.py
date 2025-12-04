@@ -25,6 +25,12 @@ def maximization(X, g):
     if n_g != n:
         return None, None, None
 
+    if not np.isclose(np.sum(g, axis=0), 1).all():
+        return None, None, None
+
+    if k <= 0:
+        return None, None, None
+
     # Proportion des points dans chaque cluster
     pi = np.sum(g, axis=1) / n
 
