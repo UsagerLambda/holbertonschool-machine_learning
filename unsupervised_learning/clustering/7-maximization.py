@@ -20,7 +20,10 @@ def maximization(X, g):
         return None, None, None
 
     n, d = X.shape
-    k, _ = g.shape
+    k, n_g = g.shape
+
+    if n_g != n:
+        return None, None, None
 
     # Proportion des points dans chaque cluster
     pi = np.sum(g, axis=1) / n
