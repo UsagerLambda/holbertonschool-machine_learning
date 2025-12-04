@@ -20,14 +20,12 @@ def maximization(X, g):
     pi = np.sum(g, axis=1) / n
 
     m = np.zeros((k, d))
-    # Calcul le centre de chaque cluster
+    S = np.zeros((k, d, d))
+    # Calcul le centre de chaque cluster et la forme des clusters
     for cluster in range(k):
         m[cluster] = np.sum(g[
             cluster, :, np.newaxis] * X, axis=0) / np.sum(g[cluster])
 
-    # Calcul la forme des clusters
-    S = np.zeros((k, d, d))
-    for cluster in range(k):
         diff = X - m[cluster]
         weighted = g[
             cluster, :, np.newaxis, np.newaxis] * (
