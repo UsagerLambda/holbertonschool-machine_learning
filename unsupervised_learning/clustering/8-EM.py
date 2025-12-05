@@ -62,8 +62,8 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
     # EM algo
     for i in range(iterations):
         if verbose and i % 10 == 0:
-            print(f"Log Likelihood after \
-                {i} iterations: {round(log_likelihood, 5)}")
+            print(f"Log Likelihood after {i} iterations: {round(
+                log_likelihood, 5)}")
 
         # Maximization step
         pi, m, S = maximization(X, g)
@@ -77,14 +77,14 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
 
         if abs(log_likelihood - prev_log_likelihood) <= tol:
             if verbose:
-                print(f"Log Likelihood after \
-                    {i + 1} iterations: {round(log_likelihood, 5)}")
+                print(f"Log Likelihood after {i + 1} iterations: {round(
+                    log_likelihood, 5)}")
             break
 
         prev_log_likelihood = log_likelihood
     else:
         if verbose:
-            print("Log Likelihood after {} iterations: {}".format(
-                iterations, round(log_likelihood, 5)))
+            print(f"Log Likelihood after {i} iterations: {round(
+                log_likelihood, 5)}")
 
     return pi, m, S, g, log_likelihood
