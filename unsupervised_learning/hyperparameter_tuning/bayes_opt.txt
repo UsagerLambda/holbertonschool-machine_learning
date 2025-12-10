@@ -1,0 +1,50 @@
+============================================================
+BAYESIAN OPTIMIZATION REPORT - CIFAR-10 CNN
+============================================================
+
+Total optimization time: 18.36 minutes
+Number of iterations: 30
+
+BEST HYPERPARAMETERS FOUND:
+------------------------------------------------------------
+  Batch size:         64
+  Learning rate:      0.001196
+  Dropout:            0.3404
+  Dense units:        128
+  L2 regularization:  0.002697
+  Hidden layers:      1
+
+BEST F1-SCORE: 0.7713
+
+ALL EVALUATIONS:
+============================================================
+Iter  1 | F1: 0.6531 | bs= 32 lr=0.00257 drop=0.39 units=256 l2=0.00087 layers=1
+Iter  2 | F1: 0.7534 | bs=128 lr=0.00140 drop=0.28 units=128 l2=0.00500 layers=2
+Iter  3 | F1: 0.7193 | bs= 32 lr=0.00210 drop=0.13 units=128 l2=0.00067 layers=2
+Iter  4 | F1: 0.7680 | bs= 64 lr=0.00118 drop=0.34 units=128 l2=0.00286 layers=1
+Iter  5 | F1: 0.6787 | bs= 32 lr=0.00232 drop=0.24 units=256 l2=0.00257 layers=1
+Iter  6 | F1: 0.7488 | bs= 64 lr=0.00164 drop=0.15 units=128 l2=0.00316 layers=1
+Iter  7 | F1: 0.7089 | bs= 64 lr=0.00300 drop=0.40 units=128 l2=0.00010 layers=1
+Iter  8 | F1: 0.7593 | bs= 64 lr=0.00106 drop=0.34 units=128 l2=0.00239 layers=1
+Iter  9 | F1: 0.6801 | bs= 64 lr=0.00300 drop=0.35 units=128 l2=0.00500 layers=1
+Iter 10 | F1: 0.6850 | bs= 64 lr=0.00300 drop=0.34 units=128 l2=0.00500 layers=1
+Iter 11 | F1: 0.7397 | bs= 64 lr=0.00117 drop=0.34 units=128 l2=0.00304 layers=1
+Iter 12 | F1: 0.7713 | bs= 64 lr=0.00120 drop=0.34 units=128 l2=0.00270 layers=1
+Iter 13 | F1: 0.7504 | bs= 64 lr=0.00141 drop=0.34 units=128 l2=0.00271 layers=1
+Iter 14 | F1: 0.7558 | bs= 64 lr=0.00094 drop=0.34 units=128 l2=0.00271 layers=1
+Iter 15 | F1: 0.7591 | bs= 64 lr=0.00127 drop=0.34 units=128 l2=0.00223 layers=1
+Iter 16 | F1: 0.7315 | bs= 64 lr=0.00153 drop=0.34 units=128 l2=0.00238 layers=1
+Iter 17 | F1: 0.7459 | bs=128 lr=0.00150 drop=0.28 units=128 l2=0.00500 layers=2
+Iter 18 | F1: 0.7612 | bs= 64 lr=0.00082 drop=0.34 units=128 l2=0.00225 layers=1
+Iter 19 | F1: 0.7652 | bs= 64 lr=0.00100 drop=0.34 units=128 l2=0.00265 layers=1
+Iter 20 | F1: 0.7670 | bs= 64 lr=0.00084 drop=0.34 units=128 l2=0.00217 layers=1
+Iter 21 | F1: 0.7439 | bs= 64 lr=0.00113 drop=0.34 units=128 l2=0.00247 layers=1
+Iter 22 | F1: 0.7432 | bs= 64 lr=0.00087 drop=0.34 units=128 l2=0.00176 layers=1
+Iter 23 | F1: 0.7485 | bs= 64 lr=0.00048 drop=0.34 units=128 l2=0.00239 layers=1
+Iter 24 | F1: 0.7007 | bs= 64 lr=0.00235 drop=0.15 units=128 l2=0.00348 layers=1
+Iter 25 | F1: 0.7660 | bs= 64 lr=0.00071 drop=0.34 units=128 l2=0.00278 layers=1
+Iter 26 | F1: 0.7649 | bs= 64 lr=0.00076 drop=0.34 units=128 l2=0.00209 layers=1
+Iter 27 | F1: 0.7408 | bs= 64 lr=0.00123 drop=0.34 units=128 l2=0.00282 layers=1
+Iter 28 | F1: 0.7664 | bs= 64 lr=0.00051 drop=0.34 units=128 l2=0.00245 layers=1
+Iter 29 | F1: 0.7533 | bs= 64 lr=0.00067 drop=0.34 units=128 l2=0.00279 layers=1
+Iter 30 | F1: 0.7645 | bs= 64 lr=0.00119 drop=0.33 units=128 l2=0.00191 layers=1
