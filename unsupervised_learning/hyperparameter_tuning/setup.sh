@@ -8,7 +8,7 @@ set -e  # Arrêter en cas d'erreur
 echo "🔧 Configuration de l'environnement hyperparameter_tuning..."
 
 # Nom de l'environnement virtuel
-VENV_NAME="venv_hyperparameter"
+VENV_NAME="venv"
 
 # Vérifier si Python 3 est installé
 if ! command -v python3 &> /dev/null; then

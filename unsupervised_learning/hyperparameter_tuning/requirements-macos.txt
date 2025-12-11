@@ -1,0 +1,9 @@
+# macOS version - Compatible avec Intel et Apple Silicon
+# TensorFlow 2.17.1 testé et fonctionnel avec Python 3.12 et tensorflow-metal 1.2.0
+tensorflow>=2.16,<2.18
+tensorflow-metal>=1.1.0; platform_system == "Darwin" and platform_machine == "arm64"
+gpyopt
+scikit-learn==1.7.2
+matplotlib==3.10.7
+numpy==1.26.4
+scipy==1.12.0
