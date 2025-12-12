@@ -1,4 +1,11 @@
-# Requirements spécifiques à macOS (Apple Silicon M1/M2)
-# Optimisations GPU pour processeurs Apple Silicon
-tensorflow-macos
-tensorflow-metal
+# Requirements for Transfer Learning CIFAR-10 Project
+# Compatible Python 3.8+ - macOS optimized (Intel et Apple Silicon)
+
+# TensorFlow pour macOS (>= 2.13 recommandé)
+tensorflow>=2.13.0
+# Accélération GPU pour Apple Silicon (M1/M2/M3)
+tensorflow-metal; platform_system == "Darwin" and platform_machine == "arm64"
+
+# Core dependencies
+numpy
+matplotlib

@@ -425,30 +425,19 @@ BAYESIAN OPTIMIZATION - STARTING
 OPTIMIZATION COMPLETED
 ============================================================
 
-
-
-
-
-
-
-
-
-
 ```
 
 ### Meilleurs hyperparamètres trouvés
 ```
-# Copiez-collez ici le contenu de bayes_opt.txt
-
-
-
-
-
-
-
-
-
-
+[TESTING]
+  Batch size:      128
+  Learning rate:   0.00060
+  Dropout:         0.24
+  Dense units:     128
+  L2 reg:          0.00143
+  Hidden layers:   1
+  F1-score:         0.7743
+  Time:            51.0s
 ```
 
 ---

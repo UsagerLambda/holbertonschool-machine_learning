@@ -1,8 +1,189 @@
-# Essential Optimization Techniques in Machine Learning:
+# Optimization - Techniques d'optimisation essentielles en Machine Learning
+
+## Introduction
+
+L'optimisation est au cœur de l'apprentissage automatique. Ce module explore les techniques avancées pour améliorer la vitesse et la qualité de l'entraînement des réseaux de neurones, depuis la normalisation des données jusqu'aux optimiseurs adaptatifs.
+
+## Pourquoi l'optimisation ?
+
+L'optimisation permet de :
+- **Accélérer la convergence** : Atteindre le minimum plus rapidement
+- **Améliorer la stabilité** : Éviter les oscillations et divergences
+- **Dépasser les minima locaux** : Explorer mieux l'espace des paramètres
+- **Gérer de grandes datasets** : Entraîner efficacement avec des mini-batches
+- **Normaliser les gradients** : Éviter les problèmes de vanishing/exploding gradients
+
+## Comment optimiser l'entraînement ?
+
+### Progression des techniques :
+
+1. **Préparation des données (0-3)** : Normalisation et mini-batches
+2. **Optimiseurs avancés (4-10)** : Momentum, RMSprop, Adam
+3. **Techniques de régulation (11-14)** : Learning rate decay, batch normalization
+
+### Pipeline d'optimisation :
+
+```
+Données brutes → Normalisation → Mini-batches → Optimiseur avancé → Batch Norm
+      ↓              ↓              ↓             ↓                  ↓
+  Stabilité    Convergence    Efficacité   Vitesse/Qualité    Stabilité interne
+```
+
+## Quand utiliser chaque technique ?
+
+### Normalisation des données :
+- **Toujours** : Pour des features de différentes échelles
+- **Effet** : Améliore la convergence et stabilité
+
+### Mini-batch Gradient Descent :
+- **Grandes datasets** : Quand les données ne tiennent pas en mémoire
+- **Compromis** : Entre précision (batch) et vitesse (stochastique)
+
+### Optimiseurs :
+
+#### SGD avec Momentum :
+- **Usage** : Baseline solide, bon pour comprendre
+- **Avantage** : Simple, prévisible
+- **Inconvénient** : Nécessite tuning manuel
+
+#### RMSprop :
+- **Usage** : RNN, problèmes avec gradients variables
+- **Avantage** : Adaptatif par feature
+- **Inconvénient** : Peut converger trop rapidement
+
+#### Adam :
+- **Usage** : Choix par défaut pour la plupart des problèmes
+- **Avantage** : Combine momentum et adaptation
+- **Inconvénient** : Plus de paramètres à configurer
+
+### Techniques avancées :
+
+#### Learning Rate Decay :
+- **Usage** : Pour affiner la convergence finale
+- **Quand** : Après stabilisation initiale de l'entraînement
+
+#### Batch Normalization :
+- **Usage** : Réseaux profonds (>3 couches)
+- **Effet** : Stabilise et accélère l'entraînement
+
+## Concepts mathématiques
+
+### Momentum :
+- **Principe** : Accumule les gradients passés
+- **Formule** : v = βv + (1-β)∇θ, θ = θ - αv
+
+### RMSprop :
+- **Principe** : Adapte le learning rate par paramètre
+- **Formule** : s = βs + (1-β)(∇θ)², θ = θ - α∇θ/√(s + ε)
+
+### Adam :
+- **Principe** : Combine momentum et RMSprop
+- **Formules** : Momentum + adaptation + bias correction
+
+### Batch Normalization :
+- **Principe** : Normalise les activations internes
+- **Formule** : z̃ = γ(z-μ)/σ + β
+
+---
+
+## Lexique des termes utilisés
+
+### A
+- **Adam** : Adaptive Moment Estimation, optimiseur populaire
+- **Adaptive** : Qui s'ajuste automatiquement aux données
+- **Alpha (α)** : Taux d'apprentissage (learning rate)
+
+### B
+- **Batch** : Lot de données traité simultanément
+- **Batch Normalization** : Normalisation par lot
+- **Beta (β)** : Paramètre de momentum ou de decay
+- **Bias Correction** : Correction de biais dans Adam
+
+### C
+- **Convergence** : Stabilisation vers un minimum
+- **Constant** : Constante de normalisation
+
+### D
+- **Decay** : Diminution progressive (learning rate)
+- **Data** : Données d'entraînement
+
+### E
+- **Epsilon (ε)** : Petite constante pour éviter division par zéro
+- **Exponential** : Moyenne mobile exponentielle
+
+### F
+- **Feature** : Caractéristique ou variable d'entrée
+
+### G
+- **Gamma (γ)** : Paramètre d'échelle en batch normalization
+- **Gradient** : Dérivée de la fonction de coût
+- **Gradient Descent** : Descente de gradient
+
+### L
+- **Learning Rate** : Taux d'apprentissage
+- **Local Minimum** : Minimum local de la fonction de coût
+
+### M
+- **Mini-batch** : Petit lot de données
+- **Momentum** : Inertie, accumulation des gradients
+- **Moving Average** : Moyenne mobile
+
+### N
+- **Normalization** : Normalisation des données ou activations
+- **Numpy** : Bibliothèque Python pour calcul numérique
+
+### O
+- **Optimization** : Optimisation, recherche du minimum
+- **Optimizer** : Optimiseur, algorithme d'optimisation
+
+### R
+- **RMSprop** : Root Mean Square Propagation
+- **Random** : Aléatoire (pour le mélange)
+
+### S
+- **SGD** : Stochastic Gradient Descent
+- **Shuffle** : Mélanger les données
+- **Stabilization** : Stabilisation de l'entraînement
+- **Standard Deviation** : Écart-type
+
+### T
+- **Training** : Entraînement du modèle
+
+### V
+- **Variable** : Variable à optimiser (poids, biais)
+- **Variance** : Variance statistique
+
+### W
+- **Weights** : Poids du réseau de neurones
+
+---
+
+## Structure des fichiers
+
+### Préparation des données (0-3) :
+- `0-norm_constants.py` : Calcul des constantes de normalisation
+- `1-normalize.py` : Normalisation Z-score
+- `2-shuffle_data.py` : Mélange des données
+- `3-mini_batch.py` : Création de mini-batches
+
+### Optimiseurs (4-10) :
+- `4-moving_average.py` : Moyenne mobile pondérée
+- `5-momentum.py` : SGD avec momentum
+- `6-momentum.py` : Momentum avec TensorFlow
+- `7-RMSProp.py` : RMSprop from scratch
+- `8-RMSProp.py` : RMSprop avec TensorFlow
+- `9-Adam.py` : Adam from scratch
+- `10-Adam.py` : Adam avec TensorFlow
+
+### Techniques avancées (11-14) :
+- `11-learning_rate_decay.py` : Decay inversement temporel
+- `12-learning_rate_decay.py` : Decay avec TensorFlow
+- `13-batch_norm.py` : Batch normalization from scratch
+- `14-batch_norm.py` : Batch normalization avec TensorFlow
+
+Chaque fichier `main.py` teste les implémentations avec des exemples pratiques.
 
 ![image](img.png)
-
-Optimization is at the heart of machine learning. Every model seeks to minimize its cost function to improve its predictions. But how can we ensure that this search is efficient, stable, and fast? This is where modern optimization techniques come into play.
 
 In this article, we will explore seven fundamental techniques that transform a chaotic learning process into a controlled descent toward excellence.
 ## <font color=C0C0C0>Feature Scaling</font>
