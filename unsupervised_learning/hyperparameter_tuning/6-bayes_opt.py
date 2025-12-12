@@ -19,12 +19,22 @@ import tensorflow as tf
 from sklearn.metrics import f1_score
 from sklearn.model_selection import train_test_split
 
-
+# Import keras via tf.keras pour compatibilité
 keras = tf.keras
 datasets = keras.datasets
 layers = keras.layers
 models = keras.models
 regularizers = keras.regularizers
+
+gpus = tf.config.list_physical_devices("GPU")
+if gpus:
+    try:
+        for gpu in gpus:
+            tf.config.experimental.set_memory_growth(gpu, True)
+    except RuntimeError as e:
+        print(f"GPU config error: {e}")
+
+tf.keras.mixed_precision.set_global_policy("mixed_float16")
 
 
 class Colors:
@@ -32,6 +42,7 @@ class Colors:
     BOLD = "\033[1m"
     DIM = "\033[2m"
 
+    # Couleurs de base
     BLACK = "\033[30m"
     RED = "\033[31m"
     GREEN = "\033[32m"
@@ -41,6 +52,7 @@ class Colors:
     CYAN = "\033[36m"
     WHITE = "\033[37m"
 
+    # Couleurs vives
     BRIGHT_BLACK = "\033[90m"
     BRIGHT_RED = "\033[91m"
     BRIGHT_GREEN = "\033[92m"
@@ -50,6 +62,7 @@ class Colors:
     BRIGHT_CYAN = "\033[96m"
     BRIGHT_WHITE = "\033[97m"
 
+    # Arrière-plans
     BG_BLACK = "\033[40m"
     BG_RED = "\033[41m"
     BG_GREEN = "\033[42m"
@@ -69,6 +82,8 @@ class Optimizer:
         self.X_val = None
         self.Y_val = None
         self.optimizer = None
+        self.train_dataset = None
+        self.val_dataset = None
 
     def load_data(self):
         (train_images, train_labels), (test_images, test_labels) = (
@@ -86,6 +101,17 @@ class Optimizer:
 
         return test_images, test_labels
 
+    def create_dataset(self, X, Y, batch_size, shuffle=True):
+        """Crée un tf.data.Dataset optimisé avec prefetch"""
+        dataset = tf.data.Dataset.from_tensor_slices((X, Y))
+        if shuffle:
+            dataset = dataset.shuffle(buffer_size=10000)
+        dataset = dataset.batch(batch_size)
+        dataset = dataset.cache()  # Cache en mémoire pour éviter de recharger
+        dataset = dataset.prefetch(
+            tf.data.AUTOTUNE
+        )  # Précharge pendant que GPU calcule
+        return dataset
 
     def build_model(self, dense_units, dropout, l2_reg, hidden_layers, learning_rate):
         """Construit le modèle CNN"""
@@ -113,7 +139,7 @@ class Optimizer:
             )
             model.add(layers.Dropout(dropout))
 
-        model.add(layers.Dense(10))
+        model.add(layers.Dense(10, dtype="float32"))
 
         model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=learning_rate),
@@ -122,7 +148,6 @@ class Optimizer:
         )
 
         return model
-
 
     def objective_function(self, hyperparams):
         """Fonction objectif à minimiser"""
@@ -143,6 +168,14 @@ class Optimizer:
         print(f"  {Colors.BLUE}L2 reg:{Colors.RESET}          {l2_reg:.5f}")
         print(f"  {Colors.BLUE}Hidden layers:{Colors.RESET}   {hidden_layers}")
 
+        # Crée les datasets optimisés avec le batch_size actuel
+        train_dataset = self.create_dataset(
+            self.X_train, self.Y_train, batch_size, shuffle=True
+        )
+        val_dataset = self.create_dataset(
+            self.X_val, self.Y_val, batch_size, shuffle=False
+        )
+
         model = self.build_model(
             dense_units, dropout, l2_reg, hidden_layers, learning_rate
         )
@@ -161,17 +194,16 @@ class Optimizer:
             monitor="val_loss", patience=5, restore_best_weights=True, verbose=0
         )
 
+        # Utilise les datasets optimisés au lieu des numpy arrays
         model.fit(
-            self.X_train,
-            self.Y_train,
-            batch_size=batch_size,
+            train_dataset,
             epochs=self.epochs,
-            validation_data=(self.X_val, self.Y_val),
+            validation_data=val_dataset,
             callbacks=[checkpoint, early_stop],
             verbose=0,
         )
 
-        Y_pred = model.predict(self.X_val, verbose=0)
+        Y_pred = model.predict(val_dataset, verbose=0)
         Y_pred_classes = tf.argmax(Y_pred, axis=1).numpy()
         Y_val_classes = tf.argmax(self.Y_val, axis=1).numpy()
 
@@ -182,13 +214,17 @@ class Optimizer:
         print(f"  {Colors.GREEN}F1-score:{Colors.RESET}         {f1:.4f}")
         print(f"  {Colors.YELLOW}Time:{Colors.RESET}            {elapsed_time:.1f}s")
 
-        return 1 - f1
+        # Libère la mémoire du modèle et du graphe TensorFlow
+        del model
+        tf.keras.backend.clear_session()
 
+        return 1 - f1
 
     def run(self):
         """Lance l'optimisation bayésienne"""
         bounds = [
-            {"name": "batch_size", "type": "discrete", "domain": (32, 64, 128)},
+            # Augmente les batch sizes pour exploiter les 14 Go de VRAM
+            {"name": "batch_size", "type": "discrete", "domain": (128, 256, 512, 1024)},
             {"name": "learning_rate", "type": "continuous", "domain": (0.0001, 0.003)},
             {"name": "dropout", "type": "continuous", "domain": (0.1, 0.4)},
             {"name": "dense_units", "type": "discrete", "domain": (128, 256)},
@@ -228,57 +264,6 @@ class Optimizer:
         return total_time
 
 
-    def save_results(self, total_time):
-        """Sauvegarde les résultats de l'optimisation"""
-        if self.optimizer is None:
-            raise RuntimeError(
-                "L'optimisation doit être lancée avant de sauvegarder les résultats"
-            )
-
-        opt = self.optimizer
-
-        os.makedirs("img", exist_ok=True)
-        opt.plot_convergence()
-        plt.savefig("img/convergence_plot.png", dpi=150, bbox_inches="tight")
-        print(
-            f"{Colors.CYAN}[SAVED]{Colors.RESET} Plot saved to: {Colors.DIM}img/convergence_plot.png{Colors.RESET}"
-        )
-
-        best_params = opt.x_opt
-        best_f1 = 1 - opt.fx_opt
-
-        with open("bayes_opt.txt", "w") as f:
-            f.write("=" * 60 + "\n")
-            f.write("BAYESIAN OPTIMIZATION REPORT - CIFAR-10 CNN\n")
-            f.write("=" * 60 + "\n\n")
-
-            f.write(f"Total optimization time: {total_time / 60:.2f} minutes\n")
-            f.write(f"Number of iterations: {len(opt.Y)}\n\n")
-
-            f.write("BEST HYPERPARAMETERS FOUND:\n")
-            f.write("-" * 60 + "\n")
-            f.write(f"  Batch size:         {int(best_params[0])}\n")
-            f.write(f"  Learning rate:      {best_params[1]:.6f}\n")
-            f.write(f"  Dropout:            {best_params[2]:.4f}\n")
-            f.write(f"  Dense units:        {int(best_params[3])}\n")
-            f.write(f"  L2 regularization:  {best_params[4]:.6f}\n")
-            f.write(f"  Hidden layers:      {int(best_params[5])}\n\n")
-
-            f.write(f"BEST F1-SCORE: {best_f1:.4f}\n\n")
-
-            f.write("ALL EVALUATIONS:\n")
-            f.write("=" * 60 + "\n")
-            for i, (X, Y) in enumerate(zip(opt.X, opt.Y)):
-                f1_iter = 1 - Y[0]
-                f.write(f"Iter {i + 1:2d} | F1: {f1_iter:.4f} | ")
-                f.write(f"bs={int(X[0]):3d} lr={X[1]:.5f} drop={X[2]:.2f} ")
-                f.write(f"units={int(X[3]):3d} l2={X[4]:.5f} layers={int(X[5])}\n")
-
-        print(
-            f"{Colors.CYAN}[SAVED]{Colors.RESET} Results saved to: {Colors.DIM}bayes_opt.txt{Colors.RESET}"
-        )
-
-
 def main():
     """Point d'entrée principal"""
     print(f"\n{Colors.BOLD}{Colors.BRIGHT_CYAN}{'=' * 60}{Colors.RESET}")
@@ -298,8 +283,21 @@ def main():
     print(f"  {Colors.BLUE}Test:{Colors.RESET}       {X_test.shape}")
 
     total_time = optimizer.run()
+    print(total_time)
 
-    optimizer.save_results(total_time)
+    # Sauvegarde le plot de convergence
+    os.makedirs("img", exist_ok=True)
+    optimizer.optimizer.plot_convergence()
+    plt.savefig("img/convergence_plot.png", dpi=150, bbox_inches="tight")
+    print(
+        f"{Colors.CYAN}[SAVED]{Colors.RESET} Plot saved to: {Colors.DIM}img/convergence_plot.png{Colors.RESET}"
+    )
+
+    # Sauvegarde le rapport GPyOpt
+    optimizer.optimizer.save_report("bayes_opt.txt")
+    print(
+        f"{Colors.CYAN}[SAVED]{Colors.RESET} Report saved to: {Colors.DIM}bayes_opt.txt{Colors.RESET}"
+    )
 
 
 if __name__ == "__main__":
