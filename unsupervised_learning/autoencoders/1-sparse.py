@@ -32,7 +32,7 @@ def autoencoder(input_dims, hidden_layers, latent_dims, lambtha):
     # Dimension du latent space
     encoded = keras.layers.Dense(
         latent_dims, activation='relu',
-        kernel_regularizer=keras.regularizers.L1(lambtha))(encoded)
+        activity_regularizer=keras.regularizers.L1(lambtha))(encoded)
     # Sauvegarde le model d'encodage
     encoder = keras.Model(inputs=input, outputs=encoded)
     # Dimension des input pour le décodeur
