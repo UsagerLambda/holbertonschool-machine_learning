@@ -40,9 +40,9 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     # Dimension des layers entre l'entrée et l'output (
     # le même que pour l'encodeur mais à l'envers)
     decoded = keras.layers.Dense(
-        hidden_layers[-1], activation='sigmoid')(latent_input)
+        hidden_layers[-1], activation='relu')(latent_input)
     for unit in reversed(hidden_layers[:-1]):
-        decoded = keras.layers.Dense(unit, activation='sigmoid')(decoded)
+        decoded = keras.layers.Dense(unit, activation='relu')(decoded)
 
     # Dimension de sortie (la même que celle d'entrée)
     decoded = keras.layers.Dense(input_dims, activation='sigmoid')(decoded)
