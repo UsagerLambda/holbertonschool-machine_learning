@@ -30,19 +30,6 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     z_mean = keras.layers.Dense(latent_dims, name="z_mean")(x)
     z_log_var = keras.layers.Dense(latent_dims, name="z_log_var")(x)
 
-    # Custom layer to add KL divergence loss
-    class KLDivergenceLayer(keras.layers.Layer):
-        def call(self, inputs):
-            z_mean, z_log_var = inputs
-            kl_loss = -0.5 * keras.backend.sum(
-                1 + z_log_var - keras.backend.square(z_mean) - keras.backend.exp(z_log_var),
-                axis=1
-            )
-            self.add_loss(keras.backend.mean(kl_loss))
-            return [z_mean, z_log_var]
-
-    z_mean_kl, z_log_var_kl = KLDivergenceLayer()([z_mean, z_log_var])
-
     # Sampling function pour Lambda layer
     def sampling(args):
         z_mean, z_log_var = args
@@ -51,7 +38,7 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
         epsilon = keras.backend.random_normal(shape=(batch, dim))
         return z_mean + keras.backend.exp(0.5 * z_log_var) * epsilon
 
-    z = keras.layers.Lambda(sampling, output_shape=(latent_dims,))([z_mean_kl, z_log_var_kl])
+    z = keras.layers.Lambda(sampling, output_shape=(latent_dims,))([z_mean, z_log_var])
 
     encoder = keras.Model(
         encoder_input, [z, z_mean, z_log_var], name="encoder")
@@ -68,6 +55,15 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     # VAE complet
     outputs = decoder(encoder(encoder_input)[0])
     auto = keras.Model(encoder_input, outputs, name="vae")
+
+    # Ajouter la KL divergence loss
+    kl_loss = -0.5 * keras.backend.mean(
+        keras.backend.sum(
+            1 + z_log_var - keras.backend.square(z_mean) - keras.backend.exp(z_log_var),
+            axis=1
+        )
+    )
+    auto.add_loss(kl_loss)
 
     # Loss function avec multiplication par input_dims
     def reconstruction_loss(y_true, y_pred):
