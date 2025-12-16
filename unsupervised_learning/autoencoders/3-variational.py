@@ -4,26 +4,6 @@
 import tensorflow.keras as keras
 
 
-class Sampling(keras.layers.Layer):
-    """Layer de sampling avec KL divergence."""
-
-    def call(self, inputs):
-        """Layer de sampling avec KL divergence."""
-        z_mean, z_log_var = inputs
-        batch = keras.backend.shape(z_mean)[0]
-        dim = keras.backend.shape(z_mean)[1]
-        epsilon = keras.backend.random_normal(shape=(batch, dim))
-
-        # KL divergence
-        kl_loss = -0.5 * keras.backend.sum(
-            1 + z_log_var - keras.backend.square(
-                z_mean) - keras.backend.exp(z_log_var), axis=1)
-        kl_loss = keras.backend.mean(kl_loss)
-        self.add_loss(kl_loss)
-
-        return z_mean + keras.backend.exp(0.5 * z_log_var) * epsilon
-
-
 def autoencoder(input_dims, hidden_layers, latent_dims):
     """Créer un autoencoder variationnel.
 
@@ -49,7 +29,29 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
 
     z_mean = keras.layers.Dense(latent_dims, name="z_mean")(x)
     z_log_var = keras.layers.Dense(latent_dims, name="z_log_var")(x)
-    z = Sampling()([z_mean, z_log_var])
+
+    # Custom layer to add KL divergence loss
+    class KLDivergenceLayer(keras.layers.Layer):
+        def call(self, inputs):
+            z_mean, z_log_var = inputs
+            kl_loss = -0.5 * keras.backend.sum(
+                1 + z_log_var - keras.backend.square(z_mean) - keras.backend.exp(z_log_var),
+                axis=1
+            )
+            self.add_loss(keras.backend.mean(kl_loss))
+            return [z_mean, z_log_var]
+
+    z_mean_kl, z_log_var_kl = KLDivergenceLayer()([z_mean, z_log_var])
+
+    # Sampling function pour Lambda layer
+    def sampling(args):
+        z_mean, z_log_var = args
+        batch = keras.backend.shape(z_mean)[0]
+        dim = keras.backend.shape(z_mean)[1]
+        epsilon = keras.backend.random_normal(shape=(batch, dim))
+        return z_mean + keras.backend.exp(0.5 * z_log_var) * epsilon
+
+    z = keras.layers.Lambda(sampling, output_shape=(latent_dims,))([z_mean_kl, z_log_var_kl])
 
     encoder = keras.Model(
         encoder_input, [z, z_mean, z_log_var], name="encoder")
