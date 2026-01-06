@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """Simple GAN implementation module."""
 
 import matplotlib.pyplot as plt
