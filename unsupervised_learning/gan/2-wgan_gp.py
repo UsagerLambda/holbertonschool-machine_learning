@@ -178,9 +178,9 @@ class WGAN_GP(keras.Model):
                 interpolated = self.get_interpolated_sample(real_s, fake_s)
                 gp = self.gradient_penalty(interpolated)
                 discr_loss = temp_loss + self.lambda_gp * gp
-                gradient = g.gradient(
-                    discr_loss, self.discriminator.trainable_variables
-                )
+            gradient = g.gradient(
+                discr_loss, self.discriminator.trainable_variables
+            )
             self.discriminator.optimizer.apply_gradients(
                 zip(gradient, self.discriminator.trainable_variables)
             )
@@ -193,4 +193,4 @@ class WGAN_GP(keras.Model):
             zip(gradient, self.generator.trainable_variables)
         )
 
-        return {"discr_loss": discr_loss, "gen_loss": gen_loss, "gp":gp}
+        return {"discr_loss": discr_loss, "gen_loss": gen_loss, "gp": gp}
