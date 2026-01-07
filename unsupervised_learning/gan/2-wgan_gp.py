@@ -193,4 +193,4 @@ class WGAN_GP(keras.Model):
             zip(gradient, self.generator.trainable_variables)
         )
 
-        return {"discr_loss": discr_loss, "gen_loss": gen_loss}
+        return {"discr_loss": discr_loss, "gen_loss": gen_loss, "gp":gp}
