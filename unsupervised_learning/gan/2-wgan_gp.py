@@ -69,7 +69,9 @@ class WGAN_GP(keras.Model):
             beta_1=self.beta_1,
             beta_2=self.beta_2,
         )
-        self.generator.compile(optimizer=generator.optimizer, loss=generator.loss)
+        self.generator.compile(
+            optimizer=generator.optimizer, loss=generator.loss
+        )
 
         # define the discriminator loss and optimizer:
         self.discriminator.loss = lambda x, y: tf.math.reduce_mean(
