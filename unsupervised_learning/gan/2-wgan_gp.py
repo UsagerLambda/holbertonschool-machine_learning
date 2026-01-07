@@ -49,7 +49,7 @@ class WGAN_GP(keras.Model):
         self.disc_iter = disc_iter
 
         self.learning_rate = learning_rate
-        self.beta_1 = 0.3  # standard value, but can be changed if necessary
+        self.beta_1 = 0.5  # standard value, but can be changed if necessary
         self.beta_2 = 0.9  # standard value, but can be changed if necessary
 
         self.lambda_gp = lambda_gp
@@ -69,9 +69,7 @@ class WGAN_GP(keras.Model):
             beta_1=self.beta_1,
             beta_2=self.beta_2,
         )
-        self.generator.compile(
-            optimizer=generator.optimizer, loss=generator.loss
-        )
+        self.generator.compile(optimizer=generator.optimizer, loss=generator.loss)
 
         # define the discriminator loss and optimizer:
         self.discriminator.loss = lambda x, y: tf.math.reduce_mean(
@@ -178,9 +176,7 @@ class WGAN_GP(keras.Model):
                 interpolated = self.get_interpolated_sample(real_s, fake_s)
                 gp = self.gradient_penalty(interpolated)
                 discr_loss = temp_loss + self.lambda_gp * gp
-            gradient = g.gradient(
-                discr_loss, self.discriminator.trainable_variables
-            )
+            gradient = g.gradient(discr_loss, self.discriminator.trainable_variables)
             self.discriminator.optimizer.apply_gradients(
                 zip(gradient, self.discriminator.trainable_variables)
             )
