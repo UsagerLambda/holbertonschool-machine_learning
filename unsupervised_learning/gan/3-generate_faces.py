@@ -96,8 +96,3 @@ def convolutional_GenDiscr():
         return discriminator
 
     return get_generator(), get_discriminator()
-
-
-gen, discr = convolutional_GenDiscr()
-print(gen.summary(line_length=100))
-print(discr.summary(line_length=100))
