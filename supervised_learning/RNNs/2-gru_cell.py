@@ -9,7 +9,6 @@ class GRUCell:
 
     def __init__(self, i, h, o):
         """Class constructor."""
-        print(f"i = {i}, h = {h}, o = {o}")
         self.Wz = np.random.randn(h + i, h)
         self.bz = np.zeros((1, h))
 
