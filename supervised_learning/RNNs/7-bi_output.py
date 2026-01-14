@@ -32,7 +32,7 @@ class BidirectionalCell:
         return h_prev
 
     def output(self, H):
-        """Calculates all outputs for the RNN."""
+        """Calculate all outputs for the RNN."""
         val = np.exp(H @ self.Wy + self.by)
         Y = val / np.sum(val, axis=2, keepdims=True)
         return Y
