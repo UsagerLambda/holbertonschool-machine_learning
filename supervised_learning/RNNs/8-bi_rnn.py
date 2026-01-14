@@ -21,7 +21,7 @@ def bi_rnn(bi_cell, X, h_0, h_t):
     # Supprime h_0
     H_forward = np.array(H_forward[1:])
     # Supprime h_t
-    H_backward = np.array(list(reversed(H_backward))[1:])
+    H_backward = np.array(H_backward[1:][::-1])
     H = np.concatenate((H_forward, H_backward), axis=2)
     Y = bi_cell.output(H)
     return H, Y
