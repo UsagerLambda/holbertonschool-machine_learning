@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Bag of words."""
 import string
+import re
 import numpy as np
 
 
@@ -12,9 +13,8 @@ def bag_of_words(sentences, vocab=None):
 
     for sentence in sentences:
         text = sentence.lower()
-        text = text.translate(str.maketrans("", "", string.punctuation))
-        tokens = text.split()
-        words.append(tokens)
+        text = re.findall(r'\b[a-z]{2,}\b', text)
+        words.append(text)
 
     if vocab is not None:
         features = sorted(vocab)
