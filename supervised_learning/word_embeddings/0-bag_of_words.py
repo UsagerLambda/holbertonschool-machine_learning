@@ -17,18 +17,16 @@ def bag_of_words(sentences, vocab=None):
         words.append(text)
 
     if vocab is not None:
-        features = np.array(vocab)
+        features = list(vocab)
     else:
         features = set()
         for sentence in words:
             features.update(sentence)
-        features = np.array(sorted(list(features)))
+        features = sorted(list(features))
 
+    embeddings = []
     for mots in words:
-        embed = []
-        for word in sorted(features):
-            count = mots.count(word)
-            embed.append(count)
+        embed = [mots.count(word) for word in features]
         embeddings.append(embed)
 
-    return np.array(embeddings), features
+    return np.array(embeddings), np.array(features)
