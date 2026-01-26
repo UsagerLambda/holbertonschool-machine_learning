@@ -31,4 +31,5 @@ def bag_of_words(sentences, vocab=None):
             embed.append(count)
         embeddings.append(embed)
 
+    features = np.array(sorted(list(features)))
     return np.array(embeddings), features
