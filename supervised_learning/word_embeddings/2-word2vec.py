@@ -2,7 +2,6 @@
 """Word to vector."""
 
 import gensim
-import os
 
 
 def word2vec_model(
