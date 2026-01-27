@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Word to vector."""
 
-import gensim
+from gensim.models import Word2Vec
+import os
 
 
 def word2vec_model(
@@ -16,16 +17,22 @@ def word2vec_model(
             workers=1
         ):
     """Create, builds and trains a gensim word2vec model."""
-    model = gensim.models.Word2Vec(
+    model = Word2Vec(
             sentences=sentences,
             vector_size=vector_size,
-            window=window,
             min_count=min_count,
-            workers=workers,
-            seed=seed,
-            epochs=epochs,
+            window=window,
+            negative=negative,
             sg=0 if cbow else 1,
-            negative=negative
+            epochs=epochs,
+            seed=seed,
+            workers=workers
         )
+    model.build_vocab(sentences)
 
+    model.train(
+            sentences,
+            total_examples=model.corpus_count,
+            epochs=model.epochs
+        )
     return model
