@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Word to vector."""
 
-from gensim.models import Word2Vec
+import gensim
 import os
 
 
@@ -17,7 +17,7 @@ def word2vec_model(
             workers=1
         ):
     """Create, builds and trains a gensim word2vec model."""
-    model = Word2Vec(
+    model = gensim.models.Word2Vec(
             sentences=sentences,
             vector_size=vector_size,
             min_count=min_count,
