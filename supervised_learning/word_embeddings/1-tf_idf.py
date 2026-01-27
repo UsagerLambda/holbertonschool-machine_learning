@@ -46,11 +46,10 @@ def tf_idf(sentences, vocab=None):
                 tf_value = 0
             tf.append(tf_value)
 
-
         tfidf = [tf[i] * idf[i] for i in range(len(features))]
         norm = np.sqrt(sum(x**2 for x in tfidf))
         if norm > 0:
             tfidf = [x / norm for x in tfidf]
         embeddings.append(tfidf)
-    
+
     return np.array(embeddings), np.array(features)
