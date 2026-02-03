@@ -40,5 +40,5 @@ class RNNEncoder(tf.keras.layers.Layer):
         # au fur et à mesure qu'il parcours les mots de la phrase
         # le hidden représente une version résumé de la phrase après avoir
         # tous parcourus
-        outputs, hidden = self.gru(embedded, initial_state=initial)
+        outputs, hidden = self.gru(embedded, initial_state=[initial])
         return outputs, hidden
