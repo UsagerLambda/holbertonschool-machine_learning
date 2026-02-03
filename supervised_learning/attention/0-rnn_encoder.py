@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """Module implémentant un encodeur RNN pour la traduction automatique."""
 
-import numpy as np
-import tensorflow
+import tensorflow as tf
 
 
-class RNNEncoder(tensorflow.keras.layers.Layer):
+class RNNEncoder(tf.keras.layers.Layer):
     """Encodeur RNN utilisant une couche GRU pour encoder une séquence."""
 
     def __init__(self, vocab, embedding, units, batch):
@@ -21,8 +20,8 @@ class RNNEncoder(tensorflow.keras.layers.Layer):
         super().__init__()
         self.batch = batch
         self.units = units
-        self.embedding = tensorflow.keras.layers.Embedding(vocab, embedding)
-        self.gru = tensorflow.keras.layers.GRU(
+        self.embedding = tf.keras.layers.Embedding(vocab, embedding)
+        self.gru = tf.keras.layers.GRU(
             units,
             kernel_initializer="glorot_uniform",
             return_sequences=True,
@@ -31,7 +30,7 @@ class RNNEncoder(tensorflow.keras.layers.Layer):
 
     def initialize_hidden_state(self):
         """Initialise la "mémoire" du GRU."""
-        return tensorflow.zeros((self.batch, self.units))
+        return tf.zeros((self.batch, self.units))
 
     def call(self, x, initial):
         """Effectue la passe avant de l'encodeur."""
