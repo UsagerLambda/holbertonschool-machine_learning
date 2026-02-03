@@ -24,6 +24,7 @@ class RNNEncoder(tf.keras.layers.Layer):
         self.gru = tf.keras.layers.GRU(
             units,
             kernel_initializer="glorot_uniform",
+            recurrent_initializer="glorot_uniform",
             return_sequences=True,
             return_state=True,
         )
