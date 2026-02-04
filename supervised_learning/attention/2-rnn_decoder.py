@@ -3,7 +3,7 @@
 
 import tensorflow as tf
 
-SelfAttention = __import__('1-self_attention').SelfAttention
+SelfAttention = __import__("1-self_attention").SelfAttention
 
 
 class RNNDecoder(tf.keras.layers.Layer):
@@ -24,10 +24,9 @@ class RNNDecoder(tf.keras.layers.Layer):
         self.embedding = tf.keras.layers.Embedding(vocab, embedding)
         self.gru = tf.keras.layers.GRU(
             units,
-            kernel_initializer="glorot_uniform",
-            recurrent_initializer="glorot_uniform",
             return_sequences=True,
             return_state=True,
+            recurrent_initializer="glorot_uniform",
         )
         self.F = tf.keras.layers.Dense(vocab)
 
@@ -46,11 +45,15 @@ class RNNDecoder(tf.keras.layers.Layer):
             hidden: tensor (batch, units) nouvel état caché
         """
         attention = SelfAttention(self.units)
-        context, weights = attention(s_prev, hidden_states)
+        context, _ = attention(s_prev, hidden_states)
+
         x = self.embedding(x)
         context = tf.expand_dims(context, 1)
-        concat = tf.concat([context, x], axis=-1)
-        x, s = self.gru(concat, initial_state=s_prev)
+
+        x = tf.concat([context, x], axis=-1)
+        x, s = self.gru(x)
         x = tf.reshape(x, (-1, x.shape[2]))
+
         y = self.F(x)
+
         return y, s
