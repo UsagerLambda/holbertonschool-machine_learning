@@ -47,7 +47,7 @@ class RNNDecoder(tf.keras.layers.Layer):
         context, weights = self.attention(s_prev, hidden_states)
         embedding = self.embedding(x)
         context = tf.expand_dims(context, 1)
-        concat = tf.keras.layers.concatenate([context, embedding], axis=-1)
+        concat = tf.concat([context, embedding], axis=-1)
         outputs, hidden = self.gru(concat, initial_state=s_prev)
         y = self.F(tf.squeeze(outputs, axis=1))
         return y, hidden
