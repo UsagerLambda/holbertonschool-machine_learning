@@ -2,6 +2,7 @@
 """Module contenant le décodeur RNN avec attention."""
 
 import tensorflow as tf
+SelfAttention = __import__("1-self_attention").SelfAttention
 
 
 class RNNDecoder(tf.keras.layers.Layer):
@@ -42,7 +43,6 @@ class RNNDecoder(tf.keras.layers.Layer):
             y: tensor (batch, vocab) prédiction du mot suivant
             hidden: tensor (batch, units) nouvel état caché
         """
-        SelfAttention = __import__("1-self_attention").SelfAttention
         attention = SelfAttention(self.gru.units)
         context, weights = attention(s_prev, hidden_states)
         embedding = self.embedding(x)
