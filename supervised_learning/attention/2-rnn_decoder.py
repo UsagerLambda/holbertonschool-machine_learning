@@ -28,6 +28,7 @@ class RNNDecoder(tf.keras.layers.Layer):
             return_state=True,
         )
         self.F = tf.keras.layers.Dense(vocab)
+        self.attention = SelfAttention(units)
 
     def call(self, x, s_prev, hidden_states):
         """
@@ -43,8 +44,7 @@ class RNNDecoder(tf.keras.layers.Layer):
             y: tensor (batch, vocab) prédiction du mot suivant
             hidden: tensor (batch, units) nouvel état caché
         """
-        attention = SelfAttention(self.gru.units)
-        context, weights = attention(s_prev, hidden_states)
+        context, weights = self.attention(s_prev, hidden_states)
         embedding = self.embedding(x)
         context = tf.expand_dims(context, 1)
         concat = tf.keras.layers.concatenate([context, embedding], axis=-1)
