@@ -2,7 +2,7 @@
 """Module contenant le décodeur RNN avec attention."""
 
 import tensorflow as tf
-SelfAttention = __import__("1-self_attention").SelfAttention
+SelfAttention = __import__('1-self_attention').SelfAttention
 
 
 class RNNDecoder(tf.keras.layers.Layer):
