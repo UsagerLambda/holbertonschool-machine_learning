@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """Module contenant la classe Transformer."""
 
-from doctest import OutputChecker
-
 import tensorflow as tf
 
 Encoder = __import__('9-transformer_encoder').Encoder
