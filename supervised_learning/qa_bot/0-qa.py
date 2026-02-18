@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Answer the question based on the contexte (reference)."""
 
 import tensorflow as tf
 import transformers
@@ -6,7 +7,7 @@ import tensorflow_hub
 
 
 def question_answer(question, reference):
-    """Answer the question based on the contexte (reference)
+    """Answer the question based on the contexte (reference).
 
     Args:
         question (string): question to answer
@@ -15,11 +16,12 @@ def question_answer(question, reference):
     Returns:
         string: answer of the question
     """
+    url = "https://www.kaggle.com/models"
     tokenizer = transformers.BertTokenizer.from_pretrained(
         "bert-large-uncased-whole-word-masking-finetuned-squad"
     )
     model = tensorflow_hub.load(
-        "https://www.kaggle.com/models/seesee/bert/TensorFlow2/uncased-tf2-qa/1"
+        f"{url}/seesee/bert/TensorFlow2/uncased-tf2-qa/1"
     )
 
     question_tokens = tokenizer.tokenize(question)
