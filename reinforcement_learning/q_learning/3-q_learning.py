@@ -24,9 +24,7 @@ def train(
     total_rewards = []
     for episode in range(episodes):
         episode_reward = 0
-        epsi = min_epsilon + (epsilon - min_epsilon) * np.exp(
-            -epsilon_decay * episode
-        )
+        epsilon = max(min_epsilon, epsilon - epsilon_decay)
 
         state, _ = env.reset()
         step = 0
@@ -34,20 +32,23 @@ def train(
 
         for step in range(max_steps):
 
-            action = epsilon_greedy(Q, state, epsi)
+            action = epsilon_greedy(Q, state, epsilon)
 
             new_state, reward, terminated, truncated, _ = env.step(action)
+            if terminated and reward == 0:
+                reward = -1
             done = terminated or truncated
-            episode_reward += reward
 
             Q[state][action] = Q[state][action] + alpha * (
                 reward + gamma * np.max(Q[new_state]) - Q[state][action]
             )
 
-            if done:
-                break
+            episode_reward += reward
 
             state = new_state
+
+            if done:
+                break
 
         total_rewards.append(episode_reward)
 
