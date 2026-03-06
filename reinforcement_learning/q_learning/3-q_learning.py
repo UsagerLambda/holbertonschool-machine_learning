@@ -24,7 +24,6 @@ def train(
     total_rewards = []
     for episode in range(episodes):
         episode_reward = 0
-        epsilon = max(min_epsilon, epsilon - epsilon_decay)
 
         state, _ = env.reset()
         step = 0
@@ -50,6 +49,7 @@ def train(
             if done:
                 break
 
+        epsilon = max(min_epsilon, epsilon - epsilon_decay)
         total_rewards.append(episode_reward)
 
     return Q, total_rewards
