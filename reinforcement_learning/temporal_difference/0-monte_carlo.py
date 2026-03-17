@@ -1,9 +1,16 @@
 #!/usr/bin/env python3
+"""Module implémentant l'algorithme de Monte Carlo.
+
+Pour l'apprentissage par renforcement.
+"""
 
 import numpy as np
 
 
-def monte_carlo(env, V, policy, episodes=5000, max_steps=100, alpha=0.1, gamma=0.99):
+def monte_carlo(
+    env, V, policy, episodes=5000, max_steps=100, alpha=0.1, gamma=0.99
+):
+    """Estime une fonction de valeur par l'algorithme de Monte Carlo."""
     for episode in range(episodes):
         state = 0
         env.reset()
