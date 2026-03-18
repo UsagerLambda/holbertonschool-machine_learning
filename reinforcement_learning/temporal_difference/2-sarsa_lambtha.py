@@ -3,7 +3,6 @@
 import numpy as np
 
 
-
 def epsilon_greedy(Q, state, epsilon):
     """Select the next action using the epsilon_greedy strategy."""
     p = np.random.uniform(0, 1)
@@ -26,6 +25,7 @@ def sarsa_lambtha(
     min_epsilon=0.1,
     epsilon_decay=0.05,
 ):
+    """Effectue l'algorithme SARSA λ pour estimer la fonction valeur."""
     for episode in range(episodes):
         state, _ = env.reset()
         e = np.zeros(Q.shape)
