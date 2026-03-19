@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
+"""Effectue l'algorithme SARSA λ pour estimer la fonction valeur."""
 
 import numpy as np
 
 
 def epsilon_greedy(Q, state, epsilon):
     """Select the next action using the epsilon_greedy strategy."""
-    p = np.random.uniform(0, 1)
-    if p > epsilon:
-        action = np.argmax(Q[state])  # Récupère la meilleur action
+    if np.random.uniform(0, 1) < epsilon:
+        action = np.random.randint(0, Q.shape[1])
     else:
-        action = np.random.randint(Q.shape[1])  # Récupère une action random
+        action = np.argmax(Q[state, :])
     return action
 
 
@@ -26,26 +26,36 @@ def sarsa_lambtha(
     epsilon_decay=0.05,
 ):
     """Effectue l'algorithme SARSA λ pour estimer la fonction valeur."""
+    initial_epsilon = epsilon
+    n_states, n_actions = Q.shape
+    E = np.zeros((n_states, n_actions))
+
     for episode in range(episodes):
+        E.fill(0)
         state, _ = env.reset()
-        e = np.zeros(Q.shape)
-        action = epsilon_greedy(Q, state, epsilon=epsilon)
+        action = epsilon_greedy(Q, state, epsilon)
 
         for step in range(max_steps):
             new_state, reward, terminated, truncated, _ = env.step(action)
-            new_action = epsilon_greedy(Q, new_state, epsilon=epsilon)
+            new_action = epsilon_greedy(Q, new_state, epsilon)
 
             delta = (
                 reward + gamma * Q[new_state, new_action] - Q[state, action]
             )
-            e[state, action] = gamma * lambtha * e[state, action]
-            e[state, action] += 1
-            Q = Q + alpha * delta * e
+
+            E[state, action] += 1
+            Q += alpha * delta * E
+            E *= gamma * lambtha
+
+            state, action = new_state, new_action
+
             if terminated or truncated:
                 break
-            state = new_state
-            action = new_action
 
-        epsilon = max(min_epsilon, epsilon * (1 - epsilon_decay))
+        epsilon = max(
+            min_epsilon,
+            min_epsilon + (initial_epsilon - min_epsilon)
+            * np.exp(-epsilon_decay * episode),
+        )
 
     return Q
