@@ -7,15 +7,17 @@ import numpy as np
 policy_gradient = __import__('policy_gradient').policy_gradient
 
 
-def train(env, nb_episodes, alpha=1e-3, gamma=0.99):
+def train(env, nb_episodes, alpha=0.000045, gamma=0.98, show_result=False):
     """Entraîne un agent avec l'algorithme REINFORCE (policy gradient).
 
     Args:
         env: environnement Gymnasium avec observation_space et action_space.
         nb_episodes (int): nombre d'épisodes d'entraînement.
-        alpha (float): taux d'apprentissage. Défaut : 1e-3.
+        alpha (float): taux d'apprentissage. Défaut : 0.000045.
         gamma (float): facteur de discount pour les récompenses futures.
-            Défaut : 0.99.
+            Défaut : 0.98.
+        show_result (bool): si True, affiche le rendu tous les 1000 épisodes.
+            Défaut : False.
 
     Returns:
         list: liste des scores (récompenses cumulées) par épisode.
@@ -73,5 +75,16 @@ def train(env, nb_episodes, alpha=1e-3, gamma=0.99):
 
         scores.append(score)
         print(f"Episode: {episode} Score: {score}")
+
+        # Rendu tous les 1000 épisodes si show_result est activé
+        if show_result and episode % 1000 == 0:
+            render_env = gym.make(env.spec.id, render_mode="human")
+            state_r, _ = render_env.reset()
+            done_r = False
+            while not done_r:
+                action_r, _ = policy_gradient(state_r, weight)
+                state_r, _, term_r, trunc_r, _ = render_env.step(action_r)
+                done_r = term_r or trunc_r
+            render_env.close()
 
     return scores
