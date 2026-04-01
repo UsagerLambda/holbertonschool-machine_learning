@@ -3,7 +3,6 @@
 """Convertit numpy array en DataFrame pandas avec des colonnes étiquetées."""
 
 import pandas as pd
-import string
 
 
 def from_numpy(array):
@@ -15,5 +14,5 @@ def from_numpy(array):
     Returns:
         DataFrame pandas avec les colonnes nommées alphabétiquement
     """
-    cols = list(string.ascii_uppercase[:array.shape[1]])
+    cols = [chr(65 + i) for i in range(array.shape[1])]
     return pd.DataFrame(array, columns=cols)
