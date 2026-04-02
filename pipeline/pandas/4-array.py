@@ -2,8 +2,6 @@
 
 """Convert les 10 dernier rows High & Close du DF en tableau numpy."""
 
-import pandas as pd
-
 
 def array(df):
     """Convert les 10 dernier rows High & Close du DF en tableau numpy."""
