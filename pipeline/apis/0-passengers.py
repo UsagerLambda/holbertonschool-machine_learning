@@ -12,12 +12,11 @@ def availableShips(passengerCount):
         response = requests.get(url)
         data = response.json()
         for ship in data['results']:
-            if ship['crew'] == "unknown":
+            passengers = ship['passengers']
+            if passengers in ("unknown", "n/a"):
                 continue
-            crew = ship['crew'].replace(",", "")
-            if "-" in crew:
-                crew = crew.split("-")[1]
-            if int(crew) >= passengerCount:
+            passengers = passengers.replace(",", "")
+            if int(passengers) >= passengerCount:
                 ships.append(ship['name'])
         url = data['next']
     return ships
