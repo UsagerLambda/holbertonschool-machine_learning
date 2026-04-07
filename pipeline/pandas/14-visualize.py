@@ -29,5 +29,6 @@ df = df.resample('D').agg({
     'Volume_(Currency)': 'sum',
 })
 
+print(df)
 df.plot()
 plt.show()
