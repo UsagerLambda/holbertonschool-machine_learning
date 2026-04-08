@@ -1,2 +1,2 @@
 // compte le nombre de document dans une collection
-db.school.countDocuments()
+db.school.count()
